@@ -67,11 +67,14 @@ jobs:
         run: |
           $zip = (Get-ChildItem dist\*.zip | Select-Object -First 1).FullName
           $stage = Join-Path $env:RUNNER_TEMP 'awk'
+          if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
           Expand-Archive -Path $zip -DestinationPath $stage
           $env:AWKWARD_PORT = '8091'
           $env:AWKWARD_NO_BROWSER = '1'
           $p = Start-Process -FilePath (Join-Path $stage 'Start Awkward Game.bat') `
-                 -WorkingDirectory $stage -PassThru -WindowStyle Hidden
+                 -WorkingDirectory $stage -PassThru -WindowStyle Hidden `
+                 -RedirectStandardOutput (Join-Path $env:RUNNER_TEMP 'awk-out.log') `
+                 -RedirectStandardError  (Join-Path $env:RUNNER_TEMP 'awk-err.log')
           $ok = $false
           foreach ($i in 1..40) {
             try {
@@ -79,7 +82,13 @@ jobs:
               if ($r.StatusCode -eq 200) { $ok = $true; break }
             } catch { Start-Sleep -Milliseconds 500 }
           }
-          if (-not $ok) { throw 'bundled PHP server did not start on Windows' }
+          if (-not $ok) {
+            Write-Host '--- launcher stdout ---'; Get-Content (Join-Path $env:RUNNER_TEMP 'awk-out.log') -ErrorAction SilentlyContinue
+            Write-Host '--- launcher stderr ---'; Get-Content (Join-Path $env:RUNNER_TEMP 'awk-err.log') -ErrorAction SilentlyContinue
+            $stateLog = Join-Path $env:LOCALAPPDATA 'awkward-game\port.txt'
+            if (Test-Path $stateLog) { Write-Host "launcher picked port: $(Get-Content $stateLog)" }
+            throw 'bundled PHP server did not start on Windows'
+          }
           $room = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8091/rooms/create.php' `
                     -Body '{"name":"CI"}' -ContentType 'application/json'
           if (-not $room.code) { throw 'room creation failed on Windows' }

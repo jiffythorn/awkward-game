@@ -27,21 +27,25 @@ if errorlevel 1 set "STATE=%CD%\rooms" & if not exist "%STATE%" mkdir "%STATE%"
 set "AWKWARD_DATA_DIR=%STATE%\rooms"
 
 REM --- port: respect AWKWARD_PORT, else first free from 8080 up ---------------
+REM probe exits 0 when the port is FREE (connect refused), 1+ when busy.
 set PORT=8080
 if not "%AWKWARD_PORT%"=="" set PORT=%AWKWARD_PORT%
 set TRIES=0
 :pickport
 "%PHP%" -r "exit((int)@fsockopen('127.0.0.1', $argv[1], $e, $s, 0.2));" %PORT% 2>nul
-if errorlevel 1 goto portready
+if errorlevel 1 goto busyport
+goto portready
+:busyport
 set /a PORT+=1
 set /a TRIES+=1
-if %TRIES% geq 20 (
-  echo No free port found - tried 20 ports from %PORT%. Close other apps or set AWKWARD_PORT.
-  pause
-  exit /b 1
-)
+if %TRIES% geq 20 goto noport
 goto pickport
+:noport
+echo No free port found - tried 20 ports. Close other apps or set AWKWARD_PORT.
+pause
+exit /b 1
 :portready
+echo %PORT%>"%STATE%\port.txt"
 
 REM --- LAN IP for the friends hint --------------------------------------------
 set LAN_IP=
