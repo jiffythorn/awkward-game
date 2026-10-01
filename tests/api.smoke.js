@@ -143,8 +143,15 @@ async function main() {
     st = await tickUntilHuman(code);
     st = await drainVotes(code);
   }
+  // Vote resolution can hand control back to a bot; keep ticking until the
+  // flow stabilizes on a human decision point (await-roll) or the game ends.
+  for (let i = 0; i < 10 && st.phase !== "await-roll" && st.phase !== "game-over"; i++) {
+    st = await tickUntilHuman(code);
+    st = await drainVotes(code);
+  }
   const curId = () => st.players[st.current].id;
-  ok(["p0", "p4"].includes(curId()), `turn reached a human (got ${curId()})`);
+  ok(["p0", "p4"].includes(curId()) || st.phase === "game-over",
+     `turn reached a human (got ${curId()}, phase ${st.phase})`);
   ok(st.players[0].pos >= 0 && st.players[0].pos <= 53, `host pos valid (${st.players[0].pos})`);
 
   console.log("— bot banter in room chat");
@@ -156,7 +163,12 @@ async function main() {
   await actAs(code, "p4", "Guest");
   st = await tickUntilHuman(code);
   st = await drainVotes(code);
-  ok(["p0", "p4"].includes(st.players[st.current].id), `turn back on a human (got ${st.players[st.current].id})`);
+  for (let i = 0; i < 10 && st.phase !== "await-roll" && st.phase !== "game-over"; i++) {
+    st = await tickUntilHuman(code);
+    st = await drainVotes(code);
+  }
+  ok(["p0", "p4"].includes(st.players[st.current].id) || st.phase === "game-over",
+     `turn back on a human (got ${st.players[st.current].id}, phase ${st.phase})`);
 
   console.log("— chat round-trip");
   await api("chat.php", { code, playerId: "p4", text: "hello from guest" });
