@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <title>The Awkward Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="neon">
+  <!-- ================= HEADER ================= -->
+  <header class="app-header">
+    <h1><span class="logo-spark">⚡</span> The Awkward Game</h1>
+    <select id="theme-select" title="Theme"></select>
+    <button class="btn btn-small" id="btn-sound" title="Toggle sound (muted by default)">🔇</button>
+    <button class="btn btn-small" id="btn-rules">📖 Rules</button>
+    <button class="btn btn-small" id="btn-save">💾 Save</button>
+    <button class="btn btn-small" id="btn-load">📂 Load</button>
+    <button class="btn btn-small" id="btn-new">✨ New Game</button>
+  </header>
+
+  <!-- ================= MAIN LAYOUT ================= -->
+  <main class="layout">
+    <section class="panel board-wrap" aria-label="Game board">
+      <div id="board"></div>
+    </section>
+
+    <aside class="side">
+      <div class="panel">
+        <div id="turn-banner">—</div>
+        <div id="lap-indicator">—</div>
+        <div class="dice-row">
+          <div id="dice">•</div>
+          <button class="btn btn-primary" id="btn-roll">🎲 Roll</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Players</h3>
+        <div id="scoreboard"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Event Log</h3>
+        <div id="log"></div>
+      </div>
+
+      <div class="panel" id="mp-panel">
+        <h3>Room <span id="room-code">—</span></h3>
+        <div id="chat"></div>
+        <div id="chat-row">
+          <input id="chat-input" placeholder="Say something awkward…" />
+          <button class="btn btn-small" id="btn-chat-send">Send</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Card modal -->
+  <div class="modal" id="card-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div id="card-inner" class="card-face">
+        <span class="card-badge" id="card-type">—</span>
+        <h3 id="card-title">—</h3>
+        <p class="card-desc" id="card-desc">—</p>
+        <p class="card-effect" id="card-effect">—</p>
+        <div id="card-actions" class="card-actions"></div>
+        <div id="card-reveal" class="card-reveal" hidden></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Target picker -->
+  <div class="modal" id="target-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>🎯 Choose your victim</h3>
+      <div id="target-list"></div>
+      <button class="btn btn-bad" data-close="target-modal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Vote modal -->
+  <div class="modal" id="vote-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3 id="vote-title">—</h3>
+      <p id="vote-desc">—</p>
+      <div id="vote-mode">—</div>
+      <div id="vote-status"></div>
+      <div id="vote-buttons"></div>
+    </div>
+  </div>
+
+  <!-- Game over -->
+  <div class="modal" id="gameover-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>🎬 That's the game!</h3>
+      <div id="awards"></div>
+      <div class="setup-actions">
+        <button class="btn btn-primary" data-close="gameover-modal">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Setup screen -->
+  <div class="modal open" id="setup-screen" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>The Awkward Game</h2>
+      <p class="card-desc">Adult party game of bluffs, shame and social ruin. 2–8 players.</p>
+      <div class="setup-block">
+        <h3>Players</h3>
+        <div id="setup-players"></div>
+        <button class="btn btn-small" id="btn-add-player">+ Add player</button>
+      </div>
+      <div class="setup-block">
+        <h3>Settings</h3>
+        <label>Laps:
+          <select id="setup-laps">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+            <option value="0">Endless</option>
+          </select>
+        </label>
+        <label>Seed (optional): <input id="setup-seed" placeholder="e.g. party-42" /></label>
+      </div>
+      <div class="setup-block">
+        <h3>Multiplayer</h3>
+        <div class="mp-row">
+          <input id="mp-name" placeholder="Your name" />
+          <select id="mp-avatar"></select>
+        </div>
+        <div class="mp-row">
+          <button class="btn btn-primary" id="btn-mp-create">Create room</button>
+          <input id="mp-code" placeholder="CODE" maxlength="6" />
+          <button class="btn" id="btn-mp-join">Join</button>
+        </div>
+        <p class="card-effect" style="margin-top:8px">Requires the PHP backend (see README).</p>
+      </div>
+      <div class="setup-actions">
+        <button class="btn btn-primary" id="btn-start">▶ Start Game</button>
+        <button class="btn btn-warn" id="btn-daily">📅 Daily Challenge</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <!-- Data must load before game.js -->
+  <script src="data/board.js"></script>
+  <script src="data/cards.js"></script>
+  <script src="data/botlines_js.js"></script>
+  <script src="data/botchat.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

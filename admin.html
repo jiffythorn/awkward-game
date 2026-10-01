@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bot Brains — AI Admin · The Awkward Game</title>
+<style>
+  :root { --bg:#0d0f14; --panel:#151923; --line:#232a38; --text:#e8ecf4; --dim:#8b94a7; --acc:#8b5cf6; --good:#22c55e; --bad:#ef4444; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--text); padding:24px; }
+  h1 { font-size:22px; margin:0 0 4px; } h2 { font-size:16px; margin:24px 0 8px; }
+  .sub { color:var(--dim); margin:0 0 20px; }
+  .bar { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 20px; }
+  button { font:inherit; background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px 14px; cursor:pointer; }
+  button.primary { background:var(--acc); border-color:var(--acc); color:#fff; }
+  button:disabled { opacity:.5; cursor:default; }
+  input, select { font:inherit; background:#0a0c10; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px 10px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .card.cloud { border-left:3px solid var(--acc); }
+  .card.local { border-left:3px solid var(--good); }
+  .card.custom { border-left:3px solid #f59e0b; }
+  .row { display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+  .row input[type=text], .row input[type=password] { flex:1; min-width:120px; }
+  .label { color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+  .meta { color:var(--dim); font-size:12px; }
+  .badge { font-size:11px; border:1px solid var(--line); border-radius:99px; padding:1px 8px; color:var(--dim); }
+  .badge.on { color:var(--good); border-color:var(--good); }
+  .badge.off { color:var(--bad); border-color:var(--bad); }
+  .modelbox { position:relative; }
+  .droplist { position:absolute; z-index:5; left:0; right:0; top:100%; max-height:220px; overflow:auto;
+              background:#0a0c10; border:1px solid var(--line); border-radius:8px; display:none; }
+  .droplist div { padding:6px 10px; cursor:pointer; }
+  .droplist div:hover, .droplist div.sel { background:#1d2433; }
+  .status { margin-top:8px; font-size:13px; min-height:1.2em; }
+  .status.ok { color:var(--good); } .status.bad { color:var(--bad); }
+  code { background:#0a0c10; padding:1px 6px; border-radius:6px; font-size:12px; }
+</style>
+</head>
+<body>
+<h1>🧠 Bot Brains</h1>
+<p class="sub">Choose which AI providers power the bots, in failover order. Keys are stored server-side in
+  <code>rooms/config.php</code> and never sent to browsers. If every provider fails, bots fall back to the
+  built-in offline line pack.</p>
+
+<div class="bar">
+  <button id="btn-enabled" class="primary">Bots: on</button>
+  <button id="btn-testall">Test whole chain</button>
+  <span id="global-status" class="status"></span>
+</div>
+
+<div class="card" style="max-width:640px">
+  <b>⏱️ Bot pacing</b>
+  <p class="sub" style="margin:4px 0 8px">How long each bot "thinks" and how long its answer stays on the card before the game moves on. Raise it so humans can read every move; 0 = instant (chaotic). The slider goes to 120s — for slower tables, type any value up to 600s in the box.</p>
+  <div class="row">
+    <input type="range" id="ai-step" min="0" max="120" step="1" style="flex:1">
+    <input type="text" id="ai-step-val" style="max-width:90px" title="seconds between bot steps (0–600, decimals OK)"> <span class="label">sec</span>
+    <button id="btn-save-pace" class="primary">Save</button>
+  </div>
+  <div class="meta" id="pace-note"></div>
+</div>
+
+<h2>Providers</h2>
+<p class="sub">Cloud providers join the chain only when a key is set. Local servers (Ollama, llama.cpp, LM Studio)
+  are tried with a sub-second timeout and skipped when not running. <b>Order = failover order.</b></p>
+<div class="grid" id="providers"></div>
+
+<h2>Custom providers</h2>
+<p class="sub">Any OpenAI-compatible endpoint works: another box on your LAN, a proxy, a different service.</p>
+<div class="card" style="max-width:640px">
+  <div class="row"><span class="label">Endpoint URL</span>
+    <input type="text" id="cu-url" placeholder="http://192.168.1.50:1234/v1/chat/completions"></div>
+  <div class="row"><span class="label">Name</span>
+    <input type="text" id="cu-label" placeholder="My provider" style="max-width:180px">
+    <span class="label">Model</span>
+    <input type="text" id="cu-model" placeholder="model id (optional)"></div>
+  <div class="row"><button id="btn-add-custom" class="primary">+ Add custom provider</button>
+    <span id="cu-status" class="status"></span></div>
+</div>
+<div class="grid" id="customs"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const state = { providers: [], chain: [], enabled: true, settings: {} };
+
+async function api(action, opts = {}) {
+  const isPost = !!opts.body;
+  const url = "rooms/ai.php?action=" + encodeURIComponent(action) + (opts.qs ? "&" + opts.qs : "");
+  const res = await fetch(url, {
+    method: isPost ? "POST" : "GET",
+    headers: isPost ? { "Content-Type": "application/json", ...(opts.headers || {}) } : (opts.headers || {}),
+    body: isPost ? JSON.stringify(opts.body) : undefined,
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok || j.error) throw new Error(j.error || ("HTTP " + res.status));
+  return j;
+}
+
+async function save(patch) {
+  await api("save", { body: { patch } });
+  await load();
+}
+
+async function load() {
+  const j = await api("catalog");
+  state.providers = j.providers;
+  state.chain = j.chain;
+  state.enabled = j.enabled;
+  state.settings = j.settings || {};
+  $("#btn-enabled").textContent = "Bots: " + (state.enabled ? "on" : "off");
+  $("#btn-enabled").classList.toggle("primary", state.enabled);
+  render();
+}
+
+function setStatus(el, text, ok) { el.textContent = text; el.className = "status " + (ok ? "ok" : "bad"); }
+
+function providerCard(p, isCustom) {
+  const card = document.createElement("div");
+  card.className = "card " + (isCustom ? "custom" : p.kind);
+  const inChain = state.chain.includes(p.id);
+  card.innerHTML = `
+    <div class="row" style="margin-top:0">
+      <b>${p.label}</b>
+      <span class="badge ${inChain ? "on" : "off"}">${inChain ? "in chain" : "not in chain"}</span>
+      ${p.disabled ? '<span class="badge off">disabled</span>' : ""}
+      <span class="badge">#${state.chain.indexOf(p.id) >= 0 ? state.chain.indexOf(p.id) + 1 : "—"}</span>
+    </div>
+    <div class="meta">${p.url}</div>
+    <div class="meta">${p.freeTier || ""} ${p.docs ? `· <a href="${p.docs}" target="_blank" rel="noopener">get key / docs</a>` : ""}</div>
+    <div class="row" data-row="key">
+      <span class="label">Key</span>
+      <input type="password" data-k="key" placeholder="${p.hasKey ? "•••• saved" : (p.keyEnv ? "env " + p.keyEnv : "not needed (local)")}" ${p.kind !== "cloud" && !isCustom ? "disabled" : ""}>
+      <button data-act="saveKey">Save</button>
+    </div>
+    <div class="row modelbox">
+      <span class="label">Model</span>
+      <input type="text" data-k="model" value="${(p.modelOverride || p.model || "").replace(/"/g, "&quot;")}" placeholder="model id">
+      <button data-act="fetchModels" title="Fetch live model list">⟳</button>
+      <button data-act="saveModel">Save</button>
+      <div class="droplist"></div>
+    </div>
+    <div class="row">
+      <button data-act="test">Test</button>
+      ${!isCustom ? `<button data-act="toggle">${p.disabled ? "Enable" : "Disable"}</button>` : ""}
+      <span class="status" data-k="status"></span>
+    </div>`;
+
+  const status = card.querySelector('[data-k="status"]');
+  const modelInput = card.querySelector('[data-k="model"]');
+  const droplist = card.querySelector(".droplist");
+
+  card.querySelector('[data-act="saveKey"]').onclick = async () => {
+    try { await save({ keys: { [p.id]: card.querySelector('[data-k="key"]').value } });
+          setStatus(status, "key saved", true); }
+    catch (e) { setStatus(status, e.message, false); }
+  };
+  card.querySelector('[data-act="saveModel"]').onclick = async () => {
+    try { await save({ modelOverrides: { [p.id]: modelInput.value.trim() } });
+          setStatus(status, "model saved", true); }
+    catch (e) { setStatus(status, e.message, false); }
+  };
+  card.querySelector('[data-act="test"]').onclick = async () => {
+    setStatus(status, "testing…", true);
+    try {
+      const r = await api("test", { body: { provider: p.id }, headers: adminHeaders() });
+      setStatus(status, r.ok ? `pong via ${p.id} (${r.ms}ms)` : `failed (HTTP ${r.httpCode})`, r.ok);
+    } catch (e) { setStatus(status, e.message, false); }
+  };
+  const toggleBtn = card.querySelector('[data-act="toggle"]');
+  if (toggleBtn) toggleBtn.onclick = async () => {
+    const cur = new Set(state.providers.filter(x => x.disabled).map(x => x.id));
+    cur.has(p.id) ? cur.delete(p.id) : cur.add(p.id);
+    await save({ disabled: [...cur] });
+  };
+  card.querySelector('[data-act="fetchModels"]').onclick = async () => {
+    droplist.innerHTML = "<div class='meta'>loading…</div>"; droplist.style.display = "block";
+    try {
+      const r = await fetch("rooms/models.php?provider=" + encodeURIComponent(p.id), { headers: adminHeaders() })
+        .then(x => x.json());
+      const models = r.models || [];
+      if (!models.length) { droplist.innerHTML = "<div class='meta'>no list — type the model id manually</div>"; return; }
+      droplist.innerHTML = "";
+      const q = document.createElement("input");
+      q.type = "search"; q.placeholder = `search ${models.length} models…`;
+      q.style.cssText = "width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0;background:#0a0c10;color:var(--text);padding:6px 10px";
+      droplist.appendChild(q);
+      const list = document.createElement("div");
+      droplist.appendChild(list);
+      const renderList = () => {
+        const needle = q.value.toLowerCase();
+        list.innerHTML = "";
+        models.filter(m => m.toLowerCase().includes(needle)).slice(0, 100).forEach((m) => {
+          const d = document.createElement("div"); d.textContent = m;
+          d.onclick = () => { modelInput.value = m; droplist.style.display = "none";
+                              setStatus(status, "picked " + m + " — press Save model", true); };
+          list.appendChild(d);
+        });
+        if (!list.children.length) list.innerHTML = "<div class='meta'>no match</div>";
+      };
+      q.oninput = renderList; renderList();
+    } catch (e) {
+      droplist.innerHTML = `<div class='meta'>fetch failed (${e.message}) — type the model id manually</div>`;
+    }
+  };
+  document.addEventListener("click", (e) => { if (!card.contains(e.target)) droplist.style.display = "none"; });
+  return card;
+}
+
+function adminHeaders() {
+  const k = sessionStorage.getItem("awkward-admin-key");
+  return k ? { "X-Admin-Key": k } : {};
+}
+
+function render() {
+  const host = $("#providers"); host.innerHTML = "";
+  state.providers.filter(p => !p.custom).forEach(p => host.appendChild(providerCard(p, false)));
+  const cHost = $("#customs"); cHost.innerHTML = "";
+  state.providers.filter(p => p.custom).forEach(p => cHost.appendChild(providerCard(p, true)));
+  // Pacing control
+  const step = state.settings.aiStep != null ? Number(state.settings.aiStep) : 2.5;
+  $("#ai-step").value = step;
+  $("#ai-step-val").value = step;
+  $("#pace-note").textContent = step === 0
+    ? "Instant mode: bots resolve immediately (old behavior, hard to follow)."
+    : `Bots pause ~${step}s before answering and ~${step}s while their answer is shown.`;
+}
+
+$("#ai-step").oninput = () => { $("#ai-step-val").value = $("#ai-step").value; };
+const AI_STEP_MAX = 600; // slider reaches 120; the text box accepts anything up to this
+$("#ai-step").oninput = () => { $("#ai-step-val").value = $("#ai-step").value; };
+$("#ai-step-val").onchange = () => {
+  const v = Math.max(0, Math.min(AI_STEP_MAX, parseFloat($("#ai-step-val").value) || 0));
+  $("#ai-step-val").value = v;
+  $("#ai-step").value = Math.min(v, 120); // slider pegs at its max; the typed value keeps the real number
+};
+$("#btn-save-pace").onclick = async () => {
+  const s = $("#global-status");
+  const v = Math.max(0, Math.min(AI_STEP_MAX, parseFloat($("#ai-step-val").value) || 0));
+  try {
+    await api("save", { body: { patch: { aiStep: v } }, headers: adminHeaders() });
+    // Mirror for solo play (browser localStorage).
+    try { localStorage.setItem("awkward-ai-step", String(v)); } catch {}
+    setStatus(s, `pacing saved: ${v}s between bot steps`, true);
+    $("#pace-note").textContent = v === 0
+      ? "Instant mode: bots resolve immediately (old behavior, hard to follow)."
+      : `Bots pause ~${v}s before answering and ~${v}s while their answer is shown${v > 120 ? " (slider pegged — typed value in use)" : ""}.`;
+  } catch (e) { setStatus(s, e.message, false); }
+};
+
+$("#btn-enabled").onclick = async () => { await save({ enabled: !state.enabled }); };
+$("#btn-testall").onclick = async () => {
+  const s = $("#global-status");
+  setStatus(s, "testing chain…", true);
+  try {
+    const r = await api("testAll", { body: {}, headers: adminHeaders() });
+    const bits = r.results.map(x => `${x.provider}: ${x.ok ? "ok " + x.ms + "ms" : "fail " + x.httpCode}`);
+    setStatus(s, r.results.length ? bits.join(" · ") : "chain empty — add a key or start a local server", r.results.some(x => x.ok));
+  } catch (e) { setStatus(s, e.message, false); }
+};
+$("#btn-add-custom").onclick = async () => {
+  const s = $("#cu-status");
+  const url = $("#cu-url").value.trim().replace(/\/$/, "");
+  if (!/^https?:\/\//i.test(url)) { setStatus(s, "enter the full endpoint URL (…/v1/chat/completions)", false); return; }
+  const label = $("#cu-label").value.trim() || "Custom provider";
+  const model = $("#cu-model").value.trim();
+  const host = url.replace(/^https?:\/\//i, "");
+  const kind = !/^(127\.|localhost|\[::1\]|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/i.test(host) ? "cloud" : "local";
+  const cur = state.providers.filter(p => p.custom).map(p => ({ id: p.id, label: p.label, kind: p.kind, url: p.url, model: p.model, keyEnv: null }));
+  cur.push({ id: "custom" + (cur.length + 1) + Math.floor(Math.random() * 90 + 10), label, kind, url, model, keyEnv: null });
+  try {
+    await save({ customProviders: cur });
+    $("#cu-url").value = ""; $("#cu-label").value = ""; $("#cu-model").value = "";
+    setStatus(s, label + " added — set its model below", true);
+  } catch (e) { setStatus(s, e.message, false); }
+};
+
+load().catch(e => { $("#global-status").textContent = "load failed: " + e.message; $("#global-status").className = "status bad"; });
+</script>
+</body>
+</html>

@@ -1,0 +1,3403 @@
+[
+ {
+  "id": "SC-01",
+  "type": "scenario",
+  "title": "The Worst Date",
+  "description": "Recount your worst date in vivid detail to the group.",
+  "effect": "Tell the story in 60 seconds or less. No backing out mid-story.",
+  "ap": 3,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-02",
+  "type": "scenario",
+  "title": "Celebrity Confession",
+  "description": "Reveal your most embarrassing celebrity crush.",
+  "effect": "Name the name. Defending your choice costs extra dignity, not points.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-03",
+  "type": "scenario",
+  "title": "Compliment Bomb",
+  "description": "Give the player to your left a heartfelt 30-second compliment.",
+  "effect": "It must be sincere. Sarcasm voids the points.",
+  "ap": 2,
+  "sp": 1,
+  "tags": [
+   "social"
+  ]
+ },
+ {
+  "id": "SC-04",
+  "type": "scenario",
+  "title": "Autocorrect Crimes",
+  "description": "Confess your most devastating autocorrect fail.",
+  "effect": "Reenactment encouraged.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-05",
+  "type": "scenario",
+  "title": "Job Interview mime",
+  "description": "Mime your current or last job until someone guesses it.",
+  "effect": "No words, no sounds. First correct guess ends it.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "work",
+   "party"
+  ]
+ },
+ {
+  "id": "SC-06",
+  "type": "scenario",
+  "title": "Sing Your Last Text",
+  "description": "Sing the last text you sent, to the tune of a nursery rhyme.",
+  "effect": "You pick the tune. The table picks the volume.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "tech",
+   "party"
+  ]
+ },
+ {
+  "id": "SC-07",
+  "type": "scenario",
+  "title": "The Haircut Story",
+  "description": "Describe your most disastrous haircut in loving detail.",
+  "effect": "Include how you tried to hide it.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-08",
+  "type": "scenario",
+  "title": "Gallery Roulette",
+  "description": "Show the third-most-recent photo in your camera roll.",
+  "effect": "If it's genuinely private, take 2 SP instead — your call, no judgment. (Some judgment.)",
+  "ap": 3,
+  "sp": 2,
+  "tags": [
+   "social",
+   "tech"
+  ]
+ },
+ {
+  "id": "SC-09",
+  "type": "scenario",
+  "title": "Straight Face",
+  "description": "Tell a true story while the other players do everything to make you laugh.",
+  "effect": "Laugh and the table awards you nothing. Keep straight for 30 seconds to score.",
+  "ap": 4,
+  "sp": 0,
+  "tags": [
+   "party"
+  ]
+ },
+ {
+  "id": "SC-10",
+  "type": "scenario",
+  "title": "Your Red Flag",
+  "description": "Answer honestly: what is your red flag?",
+  "effect": "One answer. Sincerity scores; deflection does not.",
+  "ap": 2,
+  "sp": 1,
+  "tags": [
+   "relationship",
+   "dark humor"
+  ]
+ },
+ {
+  "id": "SC-11",
+  "type": "scenario",
+  "title": "Search History",
+  "description": "Announce the most innocent-sounding item in your search history.",
+  "effect": "You choose which secret it innocently implies.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-12",
+  "type": "scenario",
+  "title": "Impression Duel",
+  "description": "Do your best impression of the player to your right.",
+  "effect": "They award your points: generous (full) or merciless (half).",
+  "ap": 3,
+  "sp": 0,
+  "tags": [
+   "party",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-13",
+  "type": "scenario",
+  "title": "The Lie That Worked",
+  "description": "Confess a lie you told that completely worked.",
+  "effect": "Statute of limitations applies. Probably.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "dark humor",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-14",
+  "type": "scenario",
+  "title": "Niche Obsession",
+  "description": "Pitch your weirdest hyperfixation like a TED talk.",
+  "effect": "30 seconds. Enthusiasm mandatory.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-15",
+  "type": "scenario",
+  "title": "Ghost Award",
+  "description": "Give an acceptance speech for 'Most Likely To Leave You On Read'.",
+  "effect": "Thank at least two named people.",
+  "ap": 3,
+  "sp": 0,
+  "tags": [
+   "party",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-16",
+  "type": "scenario",
+  "title": "Typo Theatre",
+  "description": "Dramatically read aloud the last typo you sent someone.",
+  "effect": "Shakespearean delivery required.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-17",
+  "type": "scenario",
+  "title": "Last Cried About",
+  "description": "Admit the last thing that made you cry.",
+  "effect": "Films count. Onions count. Feelings count most.",
+  "ap": 3,
+  "sp": 0,
+  "tags": [
+   "social",
+   "dark humor"
+  ]
+ },
+ {
+  "id": "SC-18",
+  "type": "scenario",
+  "title": "Worst Roommate",
+  "description": "Describe your worst roommate's worst habit.",
+  "effect": "If YOU were the worst roommate, extra points for confessing.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "family"
+  ]
+ },
+ {
+  "id": "SC-19",
+  "type": "scenario",
+  "title": "15 Minutes",
+  "description": "Declare exactly what you'd do with 15 minutes of fame.",
+  "effect": "The table votes if you'd actually do it; if they believe you, full points.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "social"
+  ]
+ },
+ {
+  "id": "SC-20",
+  "type": "scenario",
+  "title": "Irrational Fear",
+  "description": "Confess a fear you know is ridiculous and defend it anyway.",
+  "effect": "Defense must last 20 seconds.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-21",
+  "type": "scenario",
+  "title": "Last DM",
+  "description": "Reveal the last DM you sent to someone in this room.",
+  "effect": "If none, describe the last message you deleted before sending.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "social",
+   "tech"
+  ]
+ },
+ {
+  "id": "SC-22",
+  "type": "scenario",
+  "title": "Phone Voice",
+  "description": "Act out exactly how you answer the phone.",
+  "effect": "Full performance, greeting included.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "party"
+  ]
+ },
+ {
+  "id": "SC-23",
+  "type": "scenario",
+  "title": "Weird Meal",
+  "description": "Confess the strangest thing you have ever eaten — and whether you'd eat it again.",
+  "effect": "Honesty about the 'again' is the whole game.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "food",
+   "dark humor"
+  ]
+ },
+ {
+  "id": "SC-24",
+  "type": "scenario",
+  "title": "Honest Morning",
+  "description": "Describe your real morning routine, no editing.",
+  "effect": "Include the parts you'd cut from the movie version.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-25",
+  "type": "scenario",
+  "title": "Fake Enjoyment",
+  "description": "Admit something you pretend to enjoy.",
+  "effect": "Name the people you've been lying to, generally.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social"
+  ]
+ },
+ {
+  "id": "SC-26",
+  "type": "scenario",
+  "title": "Wave Back",
+  "description": "Tell the group about the last time you waved at someone who wasn't waving at you.",
+  "effect": "Physical reenactment of the slow recovery.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-27",
+  "type": "scenario",
+  "title": "Guilty Playlist",
+  "description": "Confess the song you love that you'd never admit to.",
+  "effect": "You must hum 5 seconds of it.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "party",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-28",
+  "type": "scenario",
+  "title": "Photo Pose",
+  "description": "Recreate your most awkward photo pose for the table.",
+  "effect": "Hold it for a 3-second count by the group.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "party",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-29",
+  "type": "scenario",
+  "title": "Terrible Cinema",
+  "description": "Reveal a genuinely bad movie you love and pitch it to the group.",
+  "effect": "If anyone says 'okay actually that sounds good', +2 bonus AP.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social"
+  ]
+ },
+ {
+  "id": "SC-30",
+  "type": "scenario",
+  "title": "Googled You",
+  "description": "Admit the last thing you searched about someone in this room.",
+  "effect": "Vague answers accepted at half points.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "social",
+   "dark humor"
+  ]
+ },
+ {
+  "id": "SC-31",
+  "type": "scenario",
+  "title": "Reply-All Disaster",
+  "description": "Tell your worst reply-all / wrong-recipient story.",
+  "effect": "Include who saw it.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "work",
+   "tech"
+  ]
+ },
+ {
+  "id": "SC-32",
+  "type": "scenario",
+  "title": "The Return",
+  "description": "Explain the last thing you returned to a store and your excuse.",
+  "effect": "Real excuse preferred; creative excuse scores same.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "money",
+   "social"
+  ]
+ },
+ {
+  "id": "SC-33",
+  "type": "scenario",
+  "title": "Kitchen Disaster",
+  "description": "Describe your greatest cooking catastrophe.",
+  "effect": "Fire alarms are worth bonus points in the telling.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "food",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-34",
+  "type": "scenario",
+  "title": "Ringtone Reveal",
+  "description": "Announce your ringtone and play (or hum) it.",
+  "effect": "Silent mode counts as a confession: who are you hiding from?",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "party"
+  ]
+ },
+ {
+  "id": "SC-35",
+  "type": "scenario",
+  "title": "Secret Superstition",
+  "description": "Confess a superstition you secretly half-believe.",
+  "effect": "You must admit what happens if you don't do it.",
+  "ap": 2,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ]
+ },
+ {
+  "id": "SC-36",
+  "type": "scenario",
+  "title": "Dramatic Reading",
+  "description": "Do a dramatic reading of a random text from your phone.",
+  "effect": "Other players pick the emotion: rage, romance, or conspiracy.",
+  "ap": 3,
+  "sp": 1,
+  "tags": [
+   "party",
+   "tech"
+  ]
+ },
+ {
+  "id": "CH-01",
+  "type": "choice",
+  "title": "Two Doors",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "a": {
+   "text": "Text your ex 'we need to talk'",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit your real age on your CV",
+   "ap": 1,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-02",
+  "type": "choice",
+  "title": "Phone Policy",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "social"
+  ],
+  "a": {
+   "text": "Read your last 5 search queries aloud",
+   "ap": 3,
+   "sp": 1
+  },
+  "b": {
+   "text": "Let the group send one text from your phone (you approve wording)",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-03",
+  "type": "choice",
+  "title": "Wedding Woes",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "family"
+  ],
+  "a": {
+   "text": "Give a wedding toast in which you name the wrong bride/groom",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Fall asleep visibly during the vows",
+   "ap": 2,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-04",
+  "type": "choice",
+  "title": "Office Politics",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "a": {
+   "text": "Call your boss 'chief' for a full week",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Wear last year's Halloween costume to the quarterly review",
+   "ap": 3,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-05",
+  "type": "choice",
+  "title": "Party Trick",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "a": {
+   "text": "Do your worst dance move in the middle of the room",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Start a slow clap that nobody joins for 10 seconds",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-06",
+  "type": "choice",
+  "title": "Food Fight",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "a": {
+   "text": "Eat a spoonful of a mystery condiment the group picks",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Describe your most embarrassing food order in detail",
+   "ap": 1,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-07",
+  "type": "choice",
+  "title": "Group Chat",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "social"
+  ],
+  "a": {
+   "text": "Send 'I have an announcement 👀' to the family chat and wait 5 minutes",
+   "ap": 3,
+   "sp": 1
+  },
+  "b": {
+   "text": "Voice-note your grocery list to the work chat",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-08",
+  "type": "choice",
+  "title": "Truth Serum Lite",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "dark humor"
+  ],
+  "a": {
+   "text": "Reveal your most recent crush's initial",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Let the player to your left write your next dating-app bio line",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-09",
+  "type": "choice",
+  "title": "Airport Story",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel",
+   "cringe"
+  ],
+  "a": {
+   "text": "Set off a fake alarm 'accidentally' in front of the group (sound only)",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Board the wrong plane and only realize at takeoff — recount it in character",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-10",
+  "type": "choice",
+  "title": "Money Talks",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "social"
+  ],
+  "a": {
+   "text": "Reveal the worst thing you've spent over $100 on",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Show your last online cart total without checking out",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-11",
+  "type": "choice",
+  "title": "Karaoke Call",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "a": {
+   "text": "Sing the chorus of the last song you played",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Rap your least favorite chore list",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-12",
+  "type": "choice",
+  "title": "Neighbor Trouble",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social",
+   "family"
+  ],
+  "a": {
+   "text": "Admit what you think your neighbors think of you",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Wave 'hello' to a chair for 5 full seconds",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-13",
+  "type": "choice",
+  "title": "Tech Support",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "a": {
+   "text": "Confess how many unread emails you have (rounded honestly)",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Let the group rename your Wi-Fi",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-14",
+  "type": "choice",
+  "title": "Double Date",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "a": {
+   "text": "Describe your worst kiss in 3 adjectives",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Name the fictional character who was your first crush",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-15",
+  "type": "choice",
+  "title": "Interview Flip",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "dark humor"
+  ],
+  "a": {
+   "text": "Answer 'biggest weakness' with the truth",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Pitch the worst employee you've ever been, in the third person",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-16",
+  "type": "choice",
+  "title": "Elevator Encounter",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ],
+  "a": {
+   "text": "Hold eye contact with the player across the table for 15 seconds",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Make small talk with an imaginary stranger for 20 seconds",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-17",
+  "type": "choice",
+  "title": "Gift Dilemma",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "family"
+  ],
+  "a": {
+   "text": "Admit the worst gift you ever gave and to whom",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit the worst gift you received and where it is now",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-18",
+  "type": "choice",
+  "title": "Late Excuse",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "dark humor"
+  ],
+  "a": {
+   "text": "Invent an outrageous excuse for being 2 hours late, delivered seriously",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit the real reason you were last late",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-19",
+  "type": "choice",
+  "title": "Social Media Audit",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "cringe"
+  ],
+  "a": {
+   "text": "Show your most-used emoji",
+   "ap": 1,
+   "sp": 0
+  },
+  "b": {
+   "text": "Read out your oldest saved meme caption",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-20",
+  "type": "choice",
+  "title": "Roommate Rules",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "a": {
+   "text": "Admit the weirdest thing you do when home alone",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit the pettiest thing you've ever done over dishes",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-21",
+  "type": "choice",
+  "title": "Travel Agent",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "a": {
+   "text": "Pitch the group your dream trip including the budget",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Pitch the group your nightmare trip and why you'd still go",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-22",
+  "type": "choice",
+  "title": "Doctor, Doctor",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor",
+   "cringe"
+  ],
+  "a": {
+   "text": "Reenact your last awkward doctor's waiting-room moment",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Diagnose the player to your right with a made-up syndrome",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-23",
+  "type": "choice",
+  "title": "Shoplifter's Confession",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "dark humor"
+  ],
+  "a": {
+   "text": "Confess something tiny you took as a kid",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Confess the biggest thing you got away with not paying for",
+   "ap": 3,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-24",
+  "type": "choice",
+  "title": "Photo Evidence",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "tech"
+  ],
+  "a": {
+   "text": "Let the group pick any emoji for your next status update",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Show the group your phone's screenshot folder count and explain the top screenshot",
+   "ap": 3,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-25",
+  "type": "choice",
+  "title": "Family Reunion",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family"
+  ],
+  "a": {
+   "text": "Do your impression of the relative who asks invasive questions",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Answer one invasive question honestly — group picks it",
+   "ap": 2,
+   "sp": 1
+  }
+ },
+ {
+  "id": "CH-26",
+  "type": "choice",
+  "title": "Deadline Dance",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "a": {
+   "text": "Recount the biggest deadline you ever missed",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Set a phone alarm labeled with your worst habit and show the group",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-27",
+  "type": "choice",
+  "title": "Restaurant Fail",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food",
+   "cringe"
+  ],
+  "a": {
+   "text": "Reenact a time you sent food back",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit the fanciest place you've worn a hoodie to",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-28",
+  "type": "choice",
+  "title": "Petty Crimes",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor",
+   "social"
+  ],
+  "a": {
+   "text": "Confess the pettiest reason you've disliked someone",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Confess a rumor you accidentally started",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-29",
+  "type": "choice",
+  "title": "Gym Class Flashback",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe"
+  ],
+  "a": {
+   "text": "Reenact your most embarrassing school moment",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Tell the group your most useless talent",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-30",
+  "type": "choice",
+  "title": "Password Shame",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "a": {
+   "text": "Say one old password out loud (change it after, obviously)",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Explain your password 'system' and defend it",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-31",
+  "type": "choice",
+  "title": "Plus One",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "party"
+  ],
+  "a": {
+   "text": "Let the group invent your ideal partner's three traits",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Name your dealbreaker and defend it against one rebuttal",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-32",
+  "type": "choice",
+  "title": "Zoom Call",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "tech"
+  ],
+  "a": {
+   "text": "Join your next call with an obvious filter — commit to it",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Reenact your 'you're on mute' moment",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-33",
+  "type": "choice",
+  "title": "Tip Trouble",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "food"
+  ],
+  "a": {
+   "text": "Admit the cheapest thing you've done to save money",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Admit the most you've ever tipped and why",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-34",
+  "type": "choice",
+  "title": "Sleepover Secrets",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social",
+   "cringe"
+  ],
+  "a": {
+   "text": "Demonstrate how you fall asleep (full method)",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Reveal what you actually think about before sleeping",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-35",
+  "type": "choice",
+  "title": "The Group Photo",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "a": {
+   "text": "Take a selfie with the group doing your signature pose",
+   "ap": 2,
+   "sp": 0
+  },
+  "b": {
+   "text": "Direct the group photo like a demanding photographer for 60 seconds",
+   "ap": 3,
+   "sp": 0
+  }
+ },
+ {
+  "id": "CH-36",
+  "type": "choice",
+  "title": "Legacy Post",
+  "description": "Pick your poison.",
+  "effect": "You must choose one option. Refusal costs 3 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "dark humor"
+  ],
+  "a": {
+   "text": "Let the group draft your epitaph in one sentence",
+   "ap": 3,
+   "sp": 0
+  },
+  "b": {
+   "text": "Draft your own 'farewell tour' announcement",
+   "ap": 2,
+   "sp": 0
+  }
+ },
+ {
+  "id": "RK-01",
+  "type": "risk",
+  "title": "Coin of Fate",
+  "description": "Flip a coin: heads, you're radiant; tails, you're haunted.",
+  "effect": "Call it in the air. Chickening out costs 1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "coin",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 3
+  }
+ },
+ {
+  "id": "RK-02",
+  "type": "risk",
+  "title": "The Cold Message",
+  "description": "Claim you'd message a celebrity right now. The group decides if you would.",
+  "effect": "Believe = success. Doubt = they're right.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-03",
+  "type": "risk",
+  "title": "Dice Diva",
+  "description": "Roll the die: 4+ and your night is saved.",
+  "effect": "Play with the real die. Chickening out costs 1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-04",
+  "type": "risk",
+  "title": "Double Bluff",
+  "description": "Claim you'd give a speech at a stranger's wedding. Believable?",
+  "effect": "The table votes on your credibility.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-05",
+  "type": "risk",
+  "title": "Hot Mic",
+  "description": "Bet you can say something nice about every player in 20 seconds.",
+  "effect": "Fail once and the risk fails.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-06",
+  "type": "risk",
+  "title": "Restaurant Roulette",
+  "description": "Bet you'd eat whatever the player to your left orders next, sight unseen.",
+  "effect": "The table believes you or it doesn't.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-07",
+  "type": "risk",
+  "title": "The Confidence Gamble",
+  "description": "Claim you'd sing solo at open mic tonight.",
+  "effect": "Believability check by the group.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-08",
+  "type": "risk",
+  "title": "Heads You Win",
+  "description": "Flip for +4 AP — or 3 SP. Simple. Cruel.",
+  "effect": "Call it in the air.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "coin",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 3
+  }
+ },
+ {
+  "id": "RK-09",
+  "type": "risk",
+  "title": "Interview Roleplay",
+  "description": "Bet you can answer 'where do you see yourself in 5 years' without flinching.",
+  "effect": "Roll: 4+ holds steady.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-10",
+  "type": "risk",
+  "title": "Group Chat Gamble",
+  "description": "Bet you'd post 'good morning' to the family chat at 3am.",
+  "effect": "The group judges your recklessness.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "family"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-11",
+  "type": "risk",
+  "title": "Fortune's Fool",
+  "description": "Flip a coin for double or nothing on your composure.",
+  "effect": "Heads: dignity. Tails: embarrassment.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "coin",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 3
+  }
+ },
+ {
+  "id": "RK-12",
+  "type": "risk",
+  "title": "The Honest Gamble",
+  "description": "Bet you can take an honest compliment without deflecting.",
+  "effect": "Player to your right compliments you; roll to hold it together (4+).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-13",
+  "type": "risk",
+  "title": "Text From the Past",
+  "description": "Claim you'd reply 'hey, been a while?' to your most chaotic contact.",
+  "effect": "Believability vote.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-14",
+  "type": "risk",
+  "title": "Dice of Doom",
+  "description": "Roll: 4+ wins big, anything lower hurts.",
+  "effect": "Straight odds, no skill.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 3
+  }
+ },
+ {
+  "id": "RK-15",
+  "type": "risk",
+  "title": "The Dare-Adjacent Dare",
+  "description": "Bet you'd hold a plank while answering a personal question.",
+  "effect": "Roll 4+ to plank and answer.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-16",
+  "type": "risk",
+  "title": "Karaoke Russian Roulette",
+  "description": "Bet you'd let the DJ pick your song, sight unseen.",
+  "effect": "Believability check.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-17",
+  "type": "risk",
+  "title": "Comedy Set",
+  "description": "Bet you can make the group laugh in one sentence, topic chosen by them.",
+  "effect": "Roll 4+ to land the joke.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-18",
+  "type": "risk",
+  "title": "The Ex-Files",
+  "description": "Claim you'd watch your ex's story without a burner account.",
+  "effect": "The group votes on whether that's plausible.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "dark humor"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-19",
+  "type": "risk",
+  "title": "Budget Betrayal",
+  "description": "Bet you'd admit your salary to this table if asked directly.",
+  "effect": "Believability vote; lying here is the point of the game.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "dark humor"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-20",
+  "type": "risk",
+  "title": "One-Take Wonder",
+  "description": "Bet you can confess an embarrassing story in one take, no pauses.",
+  "effect": "Roll: 4+ is a clean take.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-21",
+  "type": "risk",
+  "title": "The Upgrade",
+  "description": "Claim you'd upgrade your seat and then actually talk to the stranger next to you.",
+  "effect": "Plausibility check by the table.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-22",
+  "type": "risk",
+  "title": "Chef's Gamble",
+  "description": "Bet you'd order the daily special without asking what it is.",
+  "effect": "Roll 4+ for the brave palate.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 3,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-23",
+  "type": "risk",
+  "title": "High-Stakes Hello",
+  "description": "Claim you'd introduce yourself to a whole quiet train car.",
+  "effect": "Believability vote.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-24",
+  "type": "risk",
+  "title": "The Final Toast",
+  "description": "Bet you could improvise a wedding toast right now, no prep.",
+  "effect": "Roll 4+ to stick the landing.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social",
+   "family"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-25",
+  "type": "risk",
+  "title": "Zero Chill",
+  "description": "Claim you'd watch horror alone with the lights off, tonight.",
+  "effect": "Plausibility check.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 3,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-26",
+  "type": "risk",
+  "title": "The Regift",
+  "description": "Bet you'd regift something this year and get away with it.",
+  "effect": "Believability vote; charming liars win.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "family"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-27",
+  "type": "risk",
+  "title": "Dice & Despair",
+  "description": "Roll the die. 4+ is triumph. 3- is lore you'll never live down.",
+  "effect": "Pure odds.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 3
+  }
+ },
+ {
+  "id": "RK-28",
+  "type": "risk",
+  "title": "Portrait Mode",
+  "description": "Bet you'd let the group take a photo of you mid-laugh and keep it.",
+  "effect": "Believability check.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party",
+   "cringe"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 3,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-29",
+  "type": "risk",
+  "title": "The Group Photo Dare",
+  "description": "Bet you'd propose the group photo 'jump shot'.",
+  "effect": "Plausibility vote. You know who you are.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 3,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-30",
+  "type": "risk",
+  "title": "Fluent Nonsense",
+  "description": "Bet you can speak 'passionately' in gibberish for 15 seconds.",
+  "effect": "Roll 4+ to commit.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-31",
+  "type": "risk",
+  "title": "The Blind Reply",
+  "description": "Claim you'd let the group write one reply in your chat app.",
+  "effect": "Believability vote.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 5,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-32",
+  "type": "risk",
+  "title": "Dance Floor Treaty",
+  "description": "Bet you'd be first on an empty dance floor.",
+  "effect": "Plausibility check.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-33",
+  "type": "risk",
+  "title": "Dice of Rebirth",
+  "description": "Roll: 4+ and you're reborn cooler. Otherwise, so much cooler before.",
+  "effect": "Simple odds, big feelings.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 2
+  }
+ },
+ {
+  "id": "RK-34",
+  "type": "risk",
+  "title": "The Compliment Assassin",
+  "description": "Bet you can compliment the most suspicious player and get a 'thank you'.",
+  "effect": "Roll 4+ to charm.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "mech": "die",
+  "reward": {
+   "ap": 4,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-35",
+  "type": "risk",
+  "title": "Hotel Breakfast Hero",
+  "description": "Claim you'd take (famously) extra croissants from the buffet.",
+  "effect": "Plausibility vote; weak deniers exposed.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel",
+   "money"
+  ],
+  "mech": "believe",
+  "reward": {
+   "ap": 3,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 1
+  }
+ },
+ {
+  "id": "RK-36",
+  "type": "risk",
+  "title": "All or Nothing",
+  "description": "Final-form gamble: double reward, double penalty.",
+  "effect": "Coin flip. Legends and cautionary tales only.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "mech": "coin",
+  "reward": {
+   "ap": 8,
+   "sp": 0
+  },
+  "penalty": {
+   "ap": 0,
+   "sp": 5
+  }
+ },
+ {
+  "id": "SB-01",
+  "type": "sabotage",
+  "title": "Pickpocket",
+  "description": "Steal 2 AP from the target.",
+  "effect": "Target loses 2 AP; you gain 2 AP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 2,
+  "uSp": 0
+ },
+ {
+  "id": "SB-02",
+  "type": "sabotage",
+  "title": "Shame Bell",
+  "description": "Ring the shame bell: target gains 2 SP.",
+  "effect": "Target gains 2 Shame.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-03",
+  "type": "sabotage",
+  "title": "Rumor Mill",
+  "description": "Spread a tiny rumor: target loses 1 AP, you gain 1.",
+  "effect": "Keep it silly. The rumor is the gift.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0
+ },
+ {
+  "id": "SB-04",
+  "type": "sabotage",
+  "title": "Awkward Tax",
+  "description": "The leader pays: target loses 2 AP and gains 1 SP.",
+  "effect": "Best used on whoever's winning.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": -2,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-05",
+  "type": "sabotage",
+  "title": "Cringe Flu",
+  "description": "Target catches secondhand embarrassment: 2 SP.",
+  "effect": "Contagious at parties.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-06",
+  "type": "sabotage",
+  "title": "Energy Vampire",
+  "description": "Drain 1 AP from target, gain 1 AP.",
+  "effect": "You feel refreshed. They feel used.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0
+ },
+ {
+  "id": "SB-07",
+  "type": "sabotage",
+  "title": "Group Photo photobomb",
+  "description": "Photobomb the target's moment: they lose 1 AP, gain 1 SP.",
+  "effect": "You will appear in the background of all their memories.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-08",
+  "type": "sabotage",
+  "title": "Screenshot",
+  "description": "'Take a screenshot': target loses 2 AP.",
+  "effect": "Of what? Doesn't matter. It exists now.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-09",
+  "type": "sabotage",
+  "title": "Red Exclamation",
+  "description": "Send the target a fake 'wrong window' message: 2 SP.",
+  "effect": "'Oh no, that wasn't for you.'",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-10",
+  "type": "sabotage",
+  "title": "Credit Thief",
+  "description": "Steal credit: take 2 AP from target.",
+  "effect": "Your name goes first on the slides.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 2,
+  "uSp": 0
+ },
+ {
+  "id": "SB-11",
+  "type": "sabotage",
+  "title": "Meeting Invite",
+  "description": "Invite target to a 7am 'quick sync': 1 SP and lose 1 AP.",
+  "effect": "There will be no agenda.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-12",
+  "type": "sabotage",
+  "title": "Double Text",
+  "description": "Force the target to double-text: 2 SP.",
+  "effect": "No response. Read at 9:47pm. No response.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-13",
+  "type": "sabotage",
+  "title": "Plus One Problem",
+  "description": "Tell everyone the target brings a plus-one 'to be safe': 1 AP, 1 SP.",
+  "effect": "Catering will remember.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "party"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-14",
+  "type": "sabotage",
+  "title": "Wet Concrete",
+  "description": "You stepped in something: lose 1 AP and blame the target for 1 SP.",
+  "effect": "It was their alley. Choose a target to blame.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe"
+  ],
+  "tAp": 0,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-15",
+  "type": "sabotage",
+  "title": "Air Horn",
+  "description": "Air horn the target's story: they lose 2 AP.",
+  "effect": "Physical air horn optional. Sound mandatory.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-16",
+  "type": "sabotage",
+  "title": "Wrong Name",
+  "description": "Call the target the wrong name all night: 2 SP.",
+  "effect": "'Sorry — Steve.' 'It's Sam.' 'Right, Steve.'",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-17",
+  "type": "sabotage",
+  "title": "Inside Joke Lockout",
+  "description": "Start an inside joke that excludes the target: they lose 1 AP.",
+  "effect": "'You had to be there.' They weren't.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-18",
+  "type": "sabotage",
+  "title": "Receipt Check",
+  "description": "Audit the target's last purchase claim: 1 SP.",
+  "effect": "'That was HOW much?'",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money"
+  ],
+  "tAp": 0,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-19",
+  "type": "sabotage",
+  "title": "Split the Bill",
+  "description": "Make the target do the bill math out loud: 1 SP, they lose 1 AP.",
+  "effect": "The answer will be wrong. Someone will say so.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "food"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-20",
+  "type": "sabotage",
+  "title": "Buffet Sabotage",
+  "description": "Save the target 'a plate' visibly: they lose 1 AP, gain 1 SP.",
+  "effect": "Generosity as a weapon.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-21",
+  "type": "sabotage",
+  "title": "Karaoke Sign-Up",
+  "description": "Sign the target up for karaoke: 2 SP.",
+  "effect": "Their song: the one they said they hate.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-22",
+  "type": "sabotage",
+  "title": "Dance Challenge",
+  "description": "Challenge the target's dance credibility publicly: they lose 2 AP.",
+  "effect": "'Oh you dance?'",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-23",
+  "type": "sabotage",
+  "title": "Photo Tag",
+  "description": "Tag the target in the worst photo: 2 SP.",
+  "effect": "Untaggable memories.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "cringe"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-24",
+  "type": "sabotage",
+  "title": "Search History Leak",
+  "description": "'Accidentally' show the target's search suggestions: they lose 2 AP.",
+  "effect": "The autocomplete did the talking.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-25",
+  "type": "sabotage",
+  "title": "Volume Confusion",
+  "description": "Blast the target's voice-note volume in public: 2 SP.",
+  "effect": "Everyone heard the intro.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "cringe"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-26",
+  "type": "sabotage",
+  "title": "Baby Photo",
+  "description": "Show the target's baby photo era: they lose 1 AP, gain 1 SP.",
+  "effect": "The haircut alone.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family",
+   "cringe"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-27",
+  "type": "sabotage",
+  "title": "Parent Phone Call",
+  "description": "Hand the target a phone: 'your mom is on speaker': 2 SP.",
+  "effect": "Everyone hears the nickname.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-28",
+  "type": "sabotage",
+  "title": "Luggage Shuffle",
+  "description": "Switch the target's carry-on location mentally: they lose 1 AP.",
+  "effect": "It was 'right here a second ago'.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-29",
+  "type": "sabotage",
+  "title": "Window Seat Claim",
+  "description": "Claim the window seat with their name on it: they lose 1 AP, gain 1 SP.",
+  "effect": "Assigned seating is a myth, but not today.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "tAp": -1,
+  "tSp": 1,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-30",
+  "type": "sabotage",
+  "title": "Cold Open",
+  "description": "Interrupt the target's story with a better one: they lose 2 AP, you gain 1.",
+  "effect": "Cruel, but the table will laugh.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0
+ },
+ {
+  "id": "SB-31",
+  "type": "sabotage",
+  "title": "Echo Chamber",
+  "description": "Repeat the target's last joke louder: they lose 1 AP, you gain 1.",
+  "effect": "Their joke. Your applause.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0
+ },
+ {
+  "id": "SB-32",
+  "type": "sabotage",
+  "title": "Sabotage Sabotage",
+  "description": "Steal a Sabotage token from the target (if they have one).",
+  "effect": "Becoming the villain is its own reward. You gain 1 AP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": 0,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0,
+  "stealToken": true
+ },
+ {
+  "id": "SB-33",
+  "type": "sabotage",
+  "title": "Chain of Shame",
+  "description": "Target loses 1 SP but must loudly defend their most embarrassing take.",
+  "effect": "Weird one: the shame is shared, the cringe is theirs.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": -1,
+  "tSp": 0,
+  "uAp": 0,
+  "uSp": 0,
+  "forceStory": true
+ },
+ {
+  "id": "SB-34",
+  "type": "sabotage",
+  "title": "Notification Storm",
+  "description": "Send the target 5 rapid messages: they lose 2 SP (distraction).",
+  "effect": "buzz. buzz-buzz. buzz.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "tAp": 0,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 0
+ },
+ {
+  "id": "SB-35",
+  "type": "sabotage",
+  "title": "The Reintroduction",
+  "description": "Introduce the target to the room with their worst fact: they lose 2 AP, you gain 1.",
+  "effect": "'This is Sam. Sam once lost a shoe at a funeral.'",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social",
+   "dark humor"
+  ],
+  "tAp": -2,
+  "tSp": 0,
+  "uAp": 1,
+  "uSp": 0
+ },
+ {
+  "id": "SB-36",
+  "type": "sabotage",
+  "title": "Grand Finale",
+  "description": "Nuclear option: target loses 3 AP and gains 2 SP.",
+  "effect": "Spend the token. Accept the consequences. Own the moment.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "tAp": -3,
+  "tSp": 2,
+  "uAp": 0,
+  "uSp": 1
+ },
+ {
+  "id": "GV-01",
+  "type": "vote",
+  "title": "The Outfit Verdict",
+  "description": "You wore that to a funeral once. Defend yourself.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP for style under fire.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-02",
+  "type": "vote",
+  "title": "Late Again",
+  "description": "You arrived 40 minutes late with a story. Is it plausible?",
+  "effect": "Punish: 3 SP. Forgive: 2 AP for commitment to the bit.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-03",
+  "type": "vote",
+  "title": "Playlist Crime",
+  "description": "You skipped the anthem at the party. Unforgivable?",
+  "effect": "Punish: 2 SP. Forgive: 1 AP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-04",
+  "type": "vote",
+  "title": "Split the Bill Act",
+  "description": "You 'forgot your wallet' last time. Did you though?",
+  "effect": "Punish: 3 SP. Forgive: 2 AP, the table believes in chaos.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-05",
+  "type": "vote",
+  "title": "Ghosting Allegation",
+  "description": "You left someone on read for 3 days. The court convenes.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP (we've all been there).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-06",
+  "type": "vote",
+  "title": "Double Text Verdict",
+  "description": "You sent 4 messages with no reply. Judge the behavior.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for bravery.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-07",
+  "type": "vote",
+  "title": "The Reply-All",
+  "description": "You replied to all 200 people. Intentionally?",
+  "effect": "Punish: 3 SP. Forgive: 2 AP for power move.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-08",
+  "type": "vote",
+  "title": "Microwave Fish",
+  "description": "You microwaved fish in the shared kitchen. The building votes.",
+  "effect": "Punish: 3 SP. Forgive: 1 AP, monsters deserve love too.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food",
+   "dark humor"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-09",
+  "type": "vote",
+  "title": "Spoilers",
+  "description": "You spoiled the ending. On purpose. Allegedly.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-10",
+  "type": "vote",
+  "title": "The Photo Choice",
+  "description": "You picked the group photo. Everyone's eyes were closed except yours.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for winning the frame.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party",
+   "cringe"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-11",
+  "type": "vote",
+  "title": "Volume Crime",
+  "description": "Your headphones leaked a questionable playlist on the bus.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP for taste in chaos.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-12",
+  "type": "vote",
+  "title": "Gift Card Regift",
+  "description": "You regifted a gift card to the gift-giver's spouse. Judgment time.",
+  "effect": "Punish: 3 SP. Forgive: 2 AP for efficiency.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "family"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-13",
+  "type": "vote",
+  "title": "Ring Light Salesman",
+  "description": "You pitched a pyramid scheme at brunch. The table remembers.",
+  "effect": "Punish: 3 SP. Forgive: 1 AP for entrepreneurial spirit.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-14",
+  "type": "vote",
+  "title": "The Reheated Take",
+  "description": "You reused someone else's joke as your own at dinner. Witnessed.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP, plagiarism is flattery.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-15",
+  "type": "vote",
+  "title": "Wedding Speech Surprise",
+  "description": "Your speech opened with 'so, how we all met...'. It went somewhere.",
+  "effect": "Punish: 3 SP. Forgive: 3 AP, the couple laughed (reportedly).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family",
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 3,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-16",
+  "type": "vote",
+  "title": "Airplane Seat Recline",
+  "description": "You reclined immediately after takeoff. Fully.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, you die free.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-17",
+  "type": "vote",
+  "title": "Hotel Buffet Strategy",
+  "description": "You 'packed snacks' from the breakfast bar. For later.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP, survival instinct.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel",
+   "food"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-18",
+  "type": "vote",
+  "title": "The Group Chat Poll",
+  "description": "You asked the chat to pick your outfit. At 2am. For a 9am meeting.",
+  "effect": "Punish: 1 SP. Forgive: 2 AP for community spirit.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 1
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-19",
+  "type": "vote",
+  "title": "Job Title Inflation",
+  "description": "You upgraded 'barista' to 'beverage consultant' at the reunion.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for branding.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-20",
+  "type": "vote",
+  "title": "Petty Vengeance",
+  "description": "You retaliated over dishes. Legally, it was disproportionate.",
+  "effect": "Punish: 3 SP. Forgive: 1 AP, justice was served (cold).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social",
+   "dark humor"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-21",
+  "type": "vote",
+  "title": "The Gym Philosopher",
+  "description": "You gave unsolicited advice at the gym. Three sets long.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, confidence noted.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-22",
+  "type": "vote",
+  "title": "Cinema Concession",
+  "description": "You brought a full dinner into the cinema. Aroma: intentional.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for logistics.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-23",
+  "type": "vote",
+  "title": "The U-Turn",
+  "description": "You blamed the GPS. Out loud. To the passenger. The GPS was right.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, we've all fought the machine.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel",
+   "cringe"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-24",
+  "type": "vote",
+  "title": "Birthday Post Tax",
+  "description": "You posted a 10-photo carousel for a friend's birthday. You were tagged in one.",
+  "effect": "Punish: 1 SP. Forgive: 2 AP for content.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 1
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-25",
+  "type": "vote",
+  "title": "Nan's WiFi",
+  "description": "You changed your grandmother's WiFi name to something unspeakable.",
+  "effect": "Punish: 3 SP. Forgive: 3 AP, legacy comedy.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family",
+   "dark humor",
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 3,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-26",
+  "type": "vote",
+  "title": "Unanimous Mercy: The Password",
+  "description": "You can't remember if this story is a secret. All must forgive for mercy.",
+  "effect": "Unanimous forgive: 3 AP. Any punish: 2 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 3,
+   "sp": 0
+  },
+  "mode": "unanimous"
+ },
+ {
+  "id": "GV-27",
+  "type": "vote",
+  "title": "Unanimous Mercy: The Nickname",
+  "description": "A childhood nickname surfaces. You may explain — or stay silent.",
+  "effect": "Unanimous forgive: 3 AP. Any punish: 2 SP and it's public domain.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family",
+   "cringe"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 3,
+   "sp": 0
+  },
+  "mode": "unanimous"
+ },
+ {
+  "id": "GV-28",
+  "type": "vote",
+  "title": "The Double Standard",
+  "description": "You said 'I'm five minutes away' from your driveway.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, time is a construct.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-29",
+  "type": "vote",
+  "title": "Brunch Order Audit",
+  "description": "You ordered 'just a coffee' and ate half of everyone's plates.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for appetite.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food",
+   "money"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-30",
+  "type": "vote",
+  "title": "The Ambiguous Emoji",
+  "description": "You replied with a single thumbs-up to serious news. The chat votes.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, thumbs are ambiguous by nature.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-31",
+  "type": "vote",
+  "title": "Standing Desk Boaster",
+  "description": "You mentioned your standing desk. Twice. At a funeral-adjacent event.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, the spine is important.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-32",
+  "type": "vote",
+  "title": "The Group Photo Director",
+  "description": "You made everyone retake the photo 9 times. It was still blurry.",
+  "effect": "Punish: 2 SP. Forgive: 2 AP for vision.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-33",
+  "type": "vote",
+  "title": "Unanimous Mercy: The Ex Text",
+  "description": "You almost texted them. You typed it. The draft lives.",
+  "effect": "Unanimous forgive: 3 AP and peace. Any punish: 2 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 3,
+   "sp": 0
+  },
+  "mode": "unanimous"
+ },
+ {
+  "id": "GV-34",
+  "type": "vote",
+  "title": "The Playlist DJ Takeover",
+  "description": "You hijacked aux for 90 minutes. Nobody was ready.",
+  "effect": "Punish: 3 SP. Forgive: 2 AP, the people need hits.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 2,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-35",
+  "type": "vote",
+  "title": "The Escape Artist",
+  "description": "You left the party without saying goodbye. To anyone. For 2 hours.",
+  "effect": "Punish: 2 SP. Forgive: 1 AP, the Irish exit is an art.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 2
+  },
+  "forgive": {
+   "ap": 1,
+   "sp": 0
+  },
+  "mode": "majority"
+ },
+ {
+  "id": "GV-36",
+  "type": "vote",
+  "title": "Final Judgment",
+  "description": "The table reviews your whole run. One last verdict.",
+  "effect": "Punish: 3 SP. Forgive: 4 AP, you've earned the benefit of the doubt.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "punish": {
+   "ap": 0,
+   "sp": 3
+  },
+  "forgive": {
+   "ap": 4,
+   "sp": 0
+  },
+  "mode": "majority"
+ }
+]

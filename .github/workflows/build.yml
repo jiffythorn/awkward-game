@@ -1,0 +1,106 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Test + build artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Engine tests
+        run: node tests/engine.test.js
+
+      - name: API tests
+        run: bash tests/run-api.sh
+
+      - name: Build AppImage
+        run: ./packaging/build-appimage.sh --tools
+
+      - name: Build Windows zip
+        run: ./packaging/build-windows-zip.sh
+
+      - name: Smoke test AppImage (launch + create room)
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: '1'
+        run: |
+          APP=$(ls dist/*.AppImage)
+          AWKWARD_PORT=8123 AWKWARD_NO_BROWSER=1 "$APP" > /tmp/awk.log 2>&1 &
+          SRV=$!
+          CODE=000
+          for i in $(seq 1 30); do
+            CODE=$(curl -s -o /dev/null -w '%{http_code}' -m 2 http://127.0.0.1:8123/ || true)
+            [ "$CODE" = "200" ] && break
+            sleep 0.5
+          done
+          if [ "$CODE" != "200" ]; then cat /tmp/awk.log; exit 1; fi
+          ROOM=$(curl -s -X POST http://127.0.0.1:8123/rooms/create.php -d '{"name":"CI"}')
+          echo "$ROOM" | grep -q '"code"' || { echo "room create failed: $ROOM"; exit 1; }
+          echo "AppImage OK: $ROOM"
+          kill $SRV 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  windows-smoke:
+    name: Smoke test Windows zip
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Launch bundled PHP and create a room
+        shell: pwsh
+        run: |
+          $zip = (Get-ChildItem dist\*.zip | Select-Object -First 1).FullName
+          $stage = Join-Path $env:RUNNER_TEMP 'awk'
+          Expand-Archive -Path $zip -DestinationPath $stage
+          $env:AWKWARD_PORT = '8091'
+          $env:AWKWARD_NO_BROWSER = '1'
+          $p = Start-Process -FilePath (Join-Path $stage 'Start Awkward Game.bat') `
+                 -WorkingDirectory $stage -PassThru -WindowStyle Hidden
+          $ok = $false
+          foreach ($i in 1..40) {
+            try {
+              $r = Invoke-WebRequest -Uri 'http://127.0.0.1:8091/' -UseBasicParsing -TimeoutSec 2
+              if ($r.StatusCode -eq 200) { $ok = $true; break }
+            } catch { Start-Sleep -Milliseconds 500 }
+          }
+          if (-not $ok) { throw 'bundled PHP server did not start on Windows' }
+          $room = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8091/rooms/create.php' `
+                    -Body '{"name":"CI"}' -ContentType 'application/json'
+          if (-not $room.code) { throw 'room creation failed on Windows' }
+          Write-Host "Windows OK — room code: $($room.code)"
+          Get-Process php -ErrorAction SilentlyContinue | Stop-Process -Force
+          Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+
+  release:
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    needs: [build, windows-smoke]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Create release with artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "The Awkward Game $GITHUB_REF_NAME" --generate-notes

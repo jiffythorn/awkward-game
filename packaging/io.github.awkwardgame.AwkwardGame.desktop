@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=The Awkward Game
+GenericName=Party Game
+Comment=Adult party game of bluffs, shame and social ruin — solo vs AI or multiplayer with room codes
+Exec=AppRun
+Icon=awkward-game
+Terminal=true
+Categories=Game;CardGame;Amusement;
+Keywords=party;game;awkward;multiplayer;dice;
+StartupNotify=true

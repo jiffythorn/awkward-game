@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.awkwardgame.AwkwardGame</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-Proprietary</project_license>
+  <name>The Awkward Game</name>
+  <developer_name translatable="no">The Awkward Game Team</developer_name>
+  <summary>Adult party game of bluffs, shame and social ruin</summary>
+  <description>
+    <p>An adult party game about surviving awkward scenarios while your friends judge you.
+    Play solo against AI bots (Chill, Chaotic, Brutal, Honest, Liar) or host multiplayer
+    with a 6-letter room code — friends just open the URL in a browser, no install needed.</p>
+  </description>
+  <launchable type="desktop-id">io.github.awkwardgame.AwkwardGame.desktop</launchable>
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-chat">moderate</content_attribute>
+  </content_rating>
+  <provides>
+    <binary>awkward-game</binary>
+  </provides>
+  <releases>
+    <release version="1.0" date="2026-10-01">
+      <description><p>First packaged release.</p></description>
+    </release>
+  </releases>
+</component>

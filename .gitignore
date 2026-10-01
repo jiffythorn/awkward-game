@@ -1,0 +1,11 @@
+# Secrets and server-local state — never commit
+rooms/config.php
+rooms/data/
+
+# AppImage / Windows zip build artifacts
+.build/
+dist/
+
+# Local tooling
+.freebuff/
+nohup.out

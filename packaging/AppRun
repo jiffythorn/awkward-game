@@ -1,0 +1,71 @@
+#!/bin/sh
+# =============================================================
+# The Awkward Game — AppRun (AppImage entry point)
+#
+# What it does:
+#   1. Points the PHP backend's writable state at ~/.local/share
+#      (the mounted AppImage itself is read-only).
+#   2. Picks the first free port from 8080 upward.
+#   3. Starts the bundled static PHP server on localhost.
+#   4. Opens the game in the user's default browser.
+#
+# Environment overrides:
+#   AWKWARD_PORT=3000   force a specific port (still falls back if busy)
+#   AWKWARD_NO_BROWSER=1  don't auto-open the browser
+# =============================================================
+set -u
+
+HERE="${APPDIR:-$(dirname "$(readlink -f "$0")")}"
+PHP="$HERE/usr/bin/php"
+
+# --- writable state (rooms, AI config, rate-limit files) ---------------------
+STATE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/awkward-game"
+mkdir -p "$STATE_DIR/rooms" 2>/dev/null || STATE_DIR="/tmp/awkward-game"
+mkdir -p "$STATE_DIR/rooms" 2>/dev/null || true
+export AWKWARD_DATA_DIR="$STATE_DIR/rooms"
+
+# --- port: respect AWKWARD_PORT, else first free from 8080 up ----------------
+PORT="${AWKWARD_PORT:-8080}"
+# probe: exit 0 = port free (connect refused), exit 1 = something listening
+is_free() { "$PHP" -r 'exit((int)@fsockopen("127.0.0.1", $argv[1], $e, $s, 0.2));' "$1" 2>/dev/null; }
+i=0
+while ! is_free "$PORT"; do
+  PORT=$((PORT + 1)); i=$((i + 1))
+  [ "$i" -ge 20 ] && { echo "No free port found (tried $((PORT-20))-$PORT)." >&2; exit 1; }
+done
+
+# --- LAN IP for the "friends on Wi-Fi" hint ---------------------------------
+LAN_IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
+[ -z "${LAN_IP:-}" ] && command -v ipconfig >/dev/null 2>&1 && \
+  LAN_IP="$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || true)"
+
+URL="http://localhost:$PORT"
+echo "=========================================================="
+echo "  The Awkward Game  —  AppImage edition"
+echo "=========================================================="
+echo "  Play here:        $URL"
+[ -n "${LAN_IP:-}" ] && echo "  Friends on Wi-Fi: http://$LAN_IP:$PORT"
+echo "  Room & AI data:   $STATE_DIR"
+echo ""
+echo "  1. Create room, share the 6-letter CODE."
+echo "  2. Friends open the Friends URL (same Wi-Fi) and Join."
+echo "     Outside your network? Host online — see README.md."
+echo "  3. Close this window (or Ctrl+C) to stop the server."
+echo "=========================================================="
+
+# --- open the browser slightly after the server is up -----------------------
+if [ "${AWKWARD_NO_BROWSER:-0}" != "1" ]; then
+  (
+    sleep 1
+    for opener in xdg-open gio open gnome-open; do
+      if command -v "$opener" >/dev/null 2>&1; then
+        if [ "$opener" = "gio" ]; then gio open "$URL" 2>/dev/null && break; fi
+        if [ "$opener" = "open" ] && [ "$(uname)" = "Darwin" ]; then open "$URL" 2>/dev/null && break; fi
+        if [ "$opener" != "gio" ] && [ "$opener" != "open" ]; then "$opener" "$URL" 2>/dev/null && break; fi
+      fi
+    done
+  ) &
+fi
+
+# --- serve (foreground; Ctrl+C stops) ---------------------------------------
+cd "$HERE" && exec "$PHP" -S 127.0.0.1:"$PORT" -t "$HERE"

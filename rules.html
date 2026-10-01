@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rules — The Awkward Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="neon">
+  <header class="app-header">
+    <h1><span class="logo-spark">⚡</span> The Awkward Game — Rules</h1>
+    <button class="btn btn-small" onclick="window.close()">✕ Close</button>
+    <button class="btn btn-small" onclick="history.back()">← Back</button>
+  </header>
+
+  <main class="layout" style="grid-template-columns: 1fr; max-width: 900px;">
+    <section class="panel">
+      <h2>The Premise</h2>
+      <p>Roll, move, land on a tile, face the awkwardness, get judged by your friends. Collect
+      <b style="color:var(--good)">Awkward Points</b> (good) while dodging
+      <b style="color:var(--bad)">Shame Points</b> (bad). Highest AP wins; lowest SP breaks ties.</p>
+
+      <h2>Turn Flow</h2>
+      <ol>
+        <li><b>Roll</b> the die (1–6).</li>
+        <li><b>Move</b> that many tiles. Crossing START grants <b>+2 AP</b>.</li>
+        <li><b>Resolve</b> the tile — its type decides which deck you draw from.</li>
+        <li><b>Respond</b>: do it, bluff it, choose, take the risk, or sabotage.</li>
+        <li><b>Get judged</b>: some cards trigger a group vote (Believe/Caught, Forgive/Punish).</li>
+        <li>Apply the effects, next player rolls.</li>
+      </ol>
+
+      <h2>Tile Types (54 tiles)</h2>
+      <ul>
+        <li><b>Scenario (13)</b> — awkward situations; do it for AP, refuse for +1 SP, or bluff.</li>
+        <li><b>Choice (9)</b> — two awful options, pick one or eat 3 SP.</li>
+        <li><b>Risk (8)</b> — gamble (coin flip / roll 4+ / group believes you) or chicken out for 1 SP.</li>
+        <li><b>Sabotage (6)</b> — spend a Sabotage Token 🎟️ on another player, or skip for +1 AP.</li>
+        <li><b>Group Vote (5)</b> — the table judges you: Forgive or Punish.</li>
+        <li><b>Safe (7)</b> — nothing happens. Bliss.</li>
+        <li><b>Chaos (3)</b> — random deck draw, +1 Sabotage Token.</li>
+        <li><b>Double Trouble (2)</b> — Scenario + Choice back to back, +1 Sabotage Token.</li>
+        <li><b>Final Combo (1)</b> — Scenario + Choice + Risk; survive all three for +10 AP.</li>
+      </ul>
+
+      <h2>Card Types (180 cards)</h2>
+      <ul>
+        <li><b>Scenario (36)</b> — do it (+AP), refuse (+SP), or bluff (group votes Believe/Caught; caught = SP).</li>
+        <li><b>Choice (36)</b> — option A or B, each with its own AP/SP.</li>
+        <li><b>Risk (36)</b> — coin / die / believe mechanics, reward vs penalty.</li>
+        <li><b>Sabotage (36)</b> — token cost; effects hit a target of your choice.</li>
+        <li><b>Group Vote (36)</b> — majority rules (tie forgives) or unanimous mercy.</li>
+      </ul>
+
+      <h2>AI Personalities</h2>
+      <p>Chill, Chaotic, Brutal, Honest and Liar each have different odds for bluffing, risk-taking,
+      sabotage and punishment. Brutal hunts the leader. Honest never bluffs (barring chaos rolls).
+      The Liar gets caught constantly and it's wonderful.</p>
+
+      <h2>Multiplayer</h2>
+      <p>One player creates a room and shares the 6-character code. Everyone joins from their own device.
+      The server holds the deck order and validates every move; clients only receive what they're allowed to know.</p>
+
+      <h2>House Rules</h2>
+      <p>Anyone may call the safe word and skip a card for +1 SP, no questions asked. The game rewards
+      playing along with the bit — never actual distress.</p>
+    </section>
+  </main>
+</body>
+</html>
