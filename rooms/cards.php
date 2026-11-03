@@ -8,7 +8,7 @@ declare(strict_types=1);
 require __DIR__ . '/lib.php';
 
 $typeFilter = (string)($_GET['type'] ?? '');
-$allowed = ['scenario', 'choice', 'risk', 'sabotage', 'vote'];
+$allowed = ['scenario', 'choice', 'risk', 'sabotage', 'vote', 'duel'];
 if ($typeFilter !== '' && !in_array($typeFilter, $allowed, true)) awkward_fail('unknown deck type');
 
 $out = [];

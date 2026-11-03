@@ -160,6 +160,12 @@ There is **no P2P mode** — multiplayer always flows through one server (that's
 - Roll the die, move around the 54-tile loop, land on a tile, face the card.
 - **Awkward Points** (AP) are good — **Shame Points** (SP) are bad.
 - Tile types: Scenario, Choice, Risk, Sabotage, Group Vote, Safe, Chaos, Double Trouble, Final Combo.
+- Group Vote cards include **dilemmas** (Split the Room): the table votes Yes/No and you earn AP for how evenly it divides. A unanimous table costs 1 SP.
+- **Duel tiles** stop the game for a Quiplash-style round: everyone writes an answer, answers are paired anonymously, and the table votes. AP is paid by vote share, so a funny loser still scores.
+- **Lap escalation:** AP from cards pays ×1, ×2, then ×3 across the three laps — late laps decide games.
+- **Wager to play:** stake 2 AP before answering a card to double its reward — come out even or behind and the stake is gone. One wager per lap.
+- **Screw token:** once per lap you can rush a rival's answer with a 10-second clock. Beat the clock and they take −2 AP (you +2); still score and the attacker eats −2 AP instead.
+- **Risk bands:** risks are graded bullseye / good / near / miss (die 6 / 5 / 4 / ≤3, or by vote margin). A bullseye doubles the reward, and nailing one while behind the leader buys an immediate extra roll.
 - Most AP after 3 laps wins; SP breaks ties against you. Full rules: open `rules.html` or read `RULES.md`.
 
 ### Multiplayer flow
@@ -241,7 +247,7 @@ index.html, rules.html   UI (single-player + multiplayer client)
 style.css                5 themes, responsive layout, animations
 game.js                  single-player engine, AI, save/load, MP client
 data/board.js            54-tile loop
-data/cards.js            180 cards (also exported to data/cards.json for PHP)
+data/cards.js            202 cards (also exported to data/cards.json for PHP)
 rooms/                   PHP multiplayer backend (lib.php + 8 endpoints)
 rooms/data/              live room JSON files (writable, git-ignorable)
 tests/                   engine tests + end-to-end API smoke test
@@ -260,6 +266,8 @@ for f in rooms/*.php; do php -l $f; done
 ```
 
 Single-player games autosave to `localStorage`; multiplayer rooms live in `rooms/data/<CODE>.json` and survive server restarts until deleted.
+
+Expansion ideas and the research behind them: [`IDEAS.md`](IDEAS.md).
 
 ---
 

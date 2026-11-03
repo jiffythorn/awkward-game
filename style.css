@@ -335,6 +335,43 @@ select, input[type="text"], input:not([type]) {
   font: inherit;
 }
 .answer-input:focus { outline: 1px solid var(--accent, #8b5cf6); }
+.card-wager {
+  margin: 8px 0 2px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px dashed rgba(245, 158, 11, 0.7);
+  font-size: 13px;
+  line-height: 1.35;
+  color: #fde68a;
+}
+.btn-wager {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.92), rgba(239, 68, 68, 0.88));
+  border-color: rgba(245, 158, 11, 0.9);
+  font-weight: 700;
+}
+.card-screw {
+  margin: 8px 0 2px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.75);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fecaca;
+}
+.card-screw.hot { animation: screwPulse 0.9s ease-in-out infinite; }
+.btn-screw {
+  background: linear-gradient(135deg, rgba(127, 29, 29, 0.95), rgba(239, 68, 68, 0.9));
+  border-color: rgba(239, 68, 68, 0.9);
+  font-weight: 700;
+}
+@keyframes screwPulse {
+  0%, 100% { border-color: rgba(239, 68, 68, 0.75); }
+  50% { border-color: #fecaca; }
+}
+
 .card-reveal {
   margin-top: 10px;
   padding: 10px 14px;
@@ -411,3 +448,16 @@ select, input[type="text"], input:not([type]) {
   from { opacity: 0; transform: translateY(8px) scale(0.96); }
   to { opacity: 1; transform: none; }
 }
+
+/* ---------- Duel modal (head-to-head rounds) ---------- */
+.duel-options { display: grid; gap: 10px; margin: 12px 0; }
+.duel-option {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 10px 12px; border: 1px solid var(--panel-border);
+  border-radius: var(--radius); background: var(--tile-bg);
+}
+.duel-option-tag { font-weight: 800; color: var(--accent); letter-spacing: 0.06em; }
+.duel-option-text { color: var(--text); }
+.duel-feed { display: grid; gap: 4px; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-dim); }
+.duel-prompt { margin: 10px 0 6px; color: var(--text); font-weight: 600; }
+.duel-done { margin: 10px 0; color: var(--good); font-weight: 700; }

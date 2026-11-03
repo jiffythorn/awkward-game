@@ -36,21 +36,79 @@
         <li><b>Choice (9)</b> — two awful options, pick one or eat 3 SP.</li>
         <li><b>Risk (8)</b> — gamble (coin flip / roll 4+ / group believes you) or chicken out for 1 SP.</li>
         <li><b>Sabotage (6)</b> — spend a Sabotage Token 🎟️ on another player, or skip for +1 AP.</li>
-        <li><b>Group Vote (5)</b> — the table judges you: Forgive or Punish.</li>
+        <li><b>Group Vote (3)</b> — the table judges you: Forgive or Punish, or splits on a dilemma.</li>
+        <li><b>Duel (2)</b> — everyone writes an answer, answers are paired, the table votes head-to-head.</li>
         <li><b>Safe (7)</b> — nothing happens. Bliss.</li>
         <li><b>Chaos (3)</b> — random deck draw, +1 Sabotage Token.</li>
         <li><b>Double Trouble (2)</b> — Scenario + Choice back to back, +1 Sabotage Token.</li>
         <li><b>Final Combo (1)</b> — Scenario + Choice + Risk; survive all three for +10 AP.</li>
       </ul>
 
-      <h2>Card Types (180 cards)</h2>
+      <h2>Card Types (202 cards)</h2>
       <ul>
         <li><b>Scenario (36)</b> — do it (+AP), refuse (+SP), or bluff (group votes Believe/Caught; caught = SP).</li>
         <li><b>Choice (36)</b> — option A or B, each with its own AP/SP.</li>
-        <li><b>Risk (36)</b> — coin / die / believe mechanics, reward vs penalty.</li>
+        <li><b>Risk (36)</b> — coin / die / believe mechanics, graded into bands (bullseye / good / near / miss).</li>
         <li><b>Sabotage (36)</b> — token cost; effects hit a target of your choice.</li>
-        <li><b>Group Vote (36)</b> — majority rules (tie forgives) or unanimous mercy.</li>
+        <li><b>Group Vote (48)</b> — 36 verdicts (majority rules or unanimous mercy) plus 12 <b>dilemmas</b>.</li>
+        <li><b>Duel (10)</b> — a prompt everyone answers, then anonymous head-to-head votes.</li>
       </ul>
+
+      <h3>Dilemmas — Split the Room</h3>
+      <p>The table votes <b>YES</b> or <b>NO</b> on a genuinely divisive question. The author earns
+      <b>1 + round(splitAp × closeness)</b> AP, where closeness is 1 − |yes − no| ÷ voters — so a
+      50/50 split pays the full 4–6 AP and a lopsided vote pays almost nothing. If 3+ players vote and
+      the table agrees unanimously, the author also takes <b>+1 SP</b> for asking a boring question.
+      The most evenly-split dilemma wins the <b>Most Divisive</b> award.</p>
+
+      <h3>Duels — Head to Head</h3>
+      <p>Everyone writes one answer (90 characters). Answers are shuffled into anonymous pairs and
+      everybody <i>except the two duelists</i> votes <b>A</b> or <b>B</b>. Payout is vote share:
+      <b>round(4 × votes ÷ voters)</b> AP each, <b>+2</b> for winning the pairing, <b>+4</b> on a
+      unanimous sweep, and a tie pays both their share <b>+1</b>. An odd table gives one player a bye
+      (+2 AP); a two-player table has no jury, so both take a flat 2 AP. Winning the most pairings
+      earns the <b>Duel Champion</b> award.</p>
+      <p><b>Duplicate answers cancel:</b> if two players write the same thing (ignoring case and
+      punctuation), that pairing skips the vote — the duplicates score 0 and a clean answer wins by
+      default (+2 AP). <b>Safe answers</b> (submitting nothing) earn only <b>half AP</b> and never count
+      as duplicates.</p>
+
+      <h3>Risk Bands — Bullseye</h3>
+      <p>Risks are graded instead of pass/fail, priced off the card's own reward:</p>
+      <ul>
+        <li><b>Bullseye</b> — die 6, or a unanimous 2+ voter table believes you: <b>double reward</b>.</li>
+        <li><b>Good</b> — die 5, a believing majority, or coin heads: the reward as written.</li>
+        <li><b>Near</b> — die 4, or a tied vote: <b>half</b> the reward, no penalty, no shame.</li>
+        <li><b>Miss</b> — die 3 or less, a doubting table, or coin tails: the penalty <b>+1 SP</b>.</li>
+      </ul>
+      <p>The coin has no middle, so it stays binary. <b>Bullseye from behind:</b> a player who is not
+      leading and nails a bullseye takes an <b>immediate extra roll</b> instead of passing the turn —
+      the cheapest comeback in the game, and the reason late laps get loud.</p>
+
+      <h3>Screw Token — Answer Now</h3>
+      <p>While <b>another player</b> has a card on the table you may spend your <b>Screw token</b> to
+      rush them: <b>10 seconds</b> to commit, or the card answers for them (refuse / chicken out / skip).
+      One screw per lap, one on the clock at a time; duels, safe tiles and chaos are immune.</p>
+      <ul>
+        <li><b>The screw lands</b> (the target gains no AP): target <b>−2 AP, +1 SP</b>, attacker <b>+2 AP</b>.</li>
+        <li><b>It backfires</b> (the target still comes out ahead): <b>attacker −2 AP</b>.</li>
+      </ul>
+      <p>Sabotage with a cost is a decision, not a free action — which makes <i>who</i> you screw a
+      social signal. Rushing the leader is noble; rushing last place is villainous.</p>
+
+      <h3>Wager to Play — Double or Nothing</h3>
+      <p>Before answering a Scenario, Choice, Risk, Sabotage or Group Vote card you may <strong>wager 2 AP</strong> on yourself — once per lap, one wager at a time.</p>
+      <ul>
+        <li><strong>Come out ahead on AP:</strong> your card winnings are <strong>doubled</strong> and the stake stays with you.</li>
+        <li><strong>Come out even or behind:</strong> the <strong>2 AP stake is gone</strong>, on top of the card's own punishment.</li>
+        <li><strong>Duels are off the table</strong> — they pay the whole table by vote share, so there is no single outcome to bet on.</li>
+      </ul>
+      <p>Trailing players are expected to gamble; the card banner shows a live wager while it rides, and bots wager more when they are behind.</p>
+
+      <h3>Lap Escalation</h3>
+      <p>AP earned from cards scales with your lap: <b>×1</b>, then <b>×2</b>, then <b>×3</b> (capped).
+      Penalties, sabotage damage, lap bonuses and the Final Combo bonus are never scaled. Late laps swing
+      harder, so a slow start is never a lost game — and the log shows the multiplier on every payout.</p>
 
       <h2>AI Personalities</h2>
       <p>Chill, Chaotic, Brutal, Honest and Liar each have different odds for bluffing, risk-taking,

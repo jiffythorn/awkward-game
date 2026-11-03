@@ -66,6 +66,8 @@
         <h3 id="card-title">—</h3>
         <p class="card-desc" id="card-desc">—</p>
         <p class="card-effect" id="card-effect">—</p>
+        <div id="card-wager" class="card-wager" hidden></div>
+        <div id="card-screw" class="card-screw" hidden></div>
         <div id="card-actions" class="card-actions"></div>
         <div id="card-reveal" class="card-reveal" hidden></div>
       </div>
@@ -89,6 +91,18 @@
       <div id="vote-mode">—</div>
       <div id="vote-status"></div>
       <div id="vote-buttons"></div>
+    </div>
+  </div>
+
+  <!-- Duel modal (everyone writes, then head-to-head votes) -->
+  <div class="modal" id="duel-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <span class="card-badge" id="duel-badge">DUEL</span>
+      <h3 id="duel-title">—</h3>
+      <p class="card-desc" id="duel-prompt">—</p>
+      <div id="duel-body"></div>
+      <div id="duel-status"></div>
+      <div id="duel-actions" class="card-actions"></div>
     </div>
   </div>
 

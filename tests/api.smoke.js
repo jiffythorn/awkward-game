@@ -69,6 +69,15 @@ async function actAs(code, playerId, playerName) {
       if (after.players[after.current].id !== playerId) return;
       continue;
     }
+    if (st.phase === "await-duel" && st.duel) {
+      const answered = st.duel.answered || {};
+      if (!answered[playerId]) {
+        await api("update.php", { code, playerId, type: "duel-answer", text: "api answer from " + playerId });
+        continue;
+      }
+      await tickUntilHuman(code);
+      return;
+    }
     if (st.phase === "await-roll") {
       await api("update.php", { code, playerId, type: "roll" });
       continue;
@@ -192,7 +201,7 @@ async function main() {
 
   console.log("— board + cards endpoints");
   eq((await api("board.php")).json.size, 54, "board endpoint returns 54 tiles");
-  eq((await api("cards.php")).json.count, 180, "cards endpoint returns 180");
+  eq((await api("cards.php")).json.count, 202, "cards endpoint returns 202");
   eq((await api("cards.php?type=risk")).json.cards[0].type, "risk", "cards endpoint filters by type");
   ok(!("ap" in (await api("cards.php")).json.cards[0]), "cards endpoint withholds deltas");
 

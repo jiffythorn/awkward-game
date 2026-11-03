@@ -38,6 +38,29 @@ if ($type === 'start') {
     awkward_respond(['ok' => true, 'state' => awkward_public_state($state, $playerId)]);
 }
 
+/* ---------------- duel answers (any player may submit while writing) ------- */
+if ($type === 'duel-answer') {
+    if (($state['phase'] ?? '') !== 'await-duel' || empty($state['duel'])) awkward_fail('no duel in progress', 409);
+    $text = trim((string)($body['text'] ?? ''));
+    if (!awkward_duel_answer($state, $playerId, $text)) awkward_fail('you already answered', 409);
+    awkward_bump($state);
+    awkward_drive_ai($state);
+    awkward_save_room($code, $state);
+    awkward_respond(['ok' => true, 'state' => awkward_public_state($state, $playerId)]);
+}
+
+/* ---------------- screw token (any rival of the active player) ------------- */
+if ($type === 'screw') {
+    $atk = awkward_player_index($state, $playerId);
+    if ($atk < 0) awkward_fail('unknown player', 403);
+    if (!awkward_can_screw($state, $atk)) awkward_fail('you cannot screw right now', 409);
+    awkward_take_screw($state, $atk);
+    awkward_bump($state);
+    awkward_drive_ai($state);
+    awkward_save_room($code, $state);
+    awkward_respond(['ok' => true, 'state' => awkward_public_state($state, $playerId)]);
+}
+
 /* ---------------- all other actions require being the current player -------- */
 $idx = awkward_require_current($state, $playerId);
 $p = &$state['players'][$idx];
@@ -82,13 +105,23 @@ switch ($type) {
         break;
     }
 
+    case 'wager': {
+        if (($state['phase'] ?? '') !== 'resolving' || empty($state['activeCard'])) awkward_fail('no card to wager on', 409);
+        $card = awkward_cards()[$state['activeCard']] ?? null;
+        if (!awkward_wager_eligible($card)) awkward_fail('you cannot wager on this card', 409);
+        if (!awkward_take_wager($state, $idx)) awkward_fail('wager already open, or already used this lap', 409);
+        awkward_bump($state);
+        awkward_drive_ai($state);
+        break;
+    }
+
     case 'advance-vote': {
         // Any non-active player may push the vote along; server validates tally.
         $verdict = (string)($body['verdict'] ?? '');
         if ($verdict !== 'yes' && $verdict !== 'no') awkward_fail('verdict must be yes|no');
         if (($state['phase'] ?? '') !== 'await-vote' || empty($state['vote'])) awkward_fail('no vote in progress', 409);
         if (awkward_vote_complete($state)) { awkward_maybe_finish_vote($state); break; }
-        if ((int)$state['current'] === $idx) awkward_fail('the judged player cannot vote', 403);
+        if (!in_array($idx, awkward_vote_voters($state), true)) awkward_fail('you cannot vote on this', 403);
         $state['vote']['verdicts'][$playerId] = $verdict;
         if (awkward_vote_complete($state)) awkward_maybe_finish_vote($state);
         awkward_bump($state);

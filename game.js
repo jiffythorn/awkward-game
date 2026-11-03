@@ -112,6 +112,12 @@ const PENALTY = {
   FINAL_COMBO_BONUS_AP: 10,
 };
 
+/** Wager to Play ("double or nothing"), documented in RULES.md §6. */
+const WAGER = { STAKE_AP: 2 };
+
+/** Screw token: rush a rival's answer, documented in RULES.md §6. */
+const SCREW = { SECONDS: 10, ATTACKER_AP: 2, TARGET_AP: 2, TARGET_SP: 1, RUSH_SUCCESS: 0.45 };
+
 const AI_PROFILES = {
   chill:   { label: "Chill",   bluff: 0.10, risk: 0.30, sabotage: 0.20, punish: 0.20, chaos: 0.05 },
   chaotic: { label: "Chaotic", bluff: 0.50, risk: 0.70, sabotage: 0.60, punish: 0.50, chaos: 0.25 },
@@ -165,7 +171,9 @@ function newPlayer(id, name, avatar, isAI, personality) {
   return {
     id, name, avatar, isAI, personality: personality || "chill",
     pos: 0, ap: 0, sp: 0, tokens: 2, lapsDone: 0,
-    stats: { bluffsBelieved: 0, bluffsCaught: 0, confessions: 0, timesSabotaged: 0, chaosTriggered: 0, risksTaken: 0, risksWon: 0 },
+    wagerApAt: null,           // AP at the moment the open wager was placed (null = no wager)
+    wagerLap: null,            // lap of the last wager (one per lap)
+    stats: { bluffsBelieved: 0, bluffsCaught: 0, confessions: 0, timesSabotaged: 0, chaosTriggered: 0, risksTaken: 0, risksWon: 0, dilemmas: 0, bestSplit: 0, duelsWon: 0, wagersWon: 0, wagersLost: 0 },
   };
 }
 
@@ -230,6 +238,8 @@ function createGame(config) {
   s.mode = config.mode || "local";
   s.laps = config.laps;
   s.players = config.players.map((p, i) => newPlayer("p" + i, p.name, p.avatar, p.isAI, p.personality));
+  s.players.forEach((pl) => { if (pl.screwLap === undefined) pl.screwLap = null; });
+  if (s.extraRollFor === undefined) s.extraRollFor = null;
   buildDecks(s);
   s.phase = "await-roll";
   G.state = s;
@@ -262,6 +272,7 @@ function cardsForTile(tileType) {
     case "risk":     return ["risk"];
     case "sabotage": return ["sabotage"];
     case "vote":     return ["vote"];
+    case "duel":     return ["duel"];
     case "double":   return ["scenario", "choice"];
     case "final":    return ["scenario", "choice", "risk"];
     default: return [];
@@ -279,6 +290,248 @@ function applyDeltas(state, playerIdx, ap, sp, why) {
   if (sp) bits.push(`${sp > 0 ? "+" : ""}${sp} SP`);
   if (bits.length) log(`${p.avatar} ${p.name}: ${bits.join(", ")} ${why || ""}`, ap < 0 || sp > 0 ? "bad" : "good");
   if (HAS_DOM) renderScoreboard();
+}
+
+/* ---- Card reward scaling (mirrored in rooms/lib.php) ---- */
+
+/** Card rewards escalate with the acting player's lap: ×1, ×2, ×3 (capped), so
+ *  a slow start is never a lost game. See RULES.md §6 (Lap escalation). */
+function lapMultiplier(state, playerIdx) {
+  const p = state && state.players ? state.players[playerIdx] : null;
+  return Math.min(3, Math.max(1, ((p && p.lapsDone) || 0) + 1));
+}
+
+/** Positive AP earned from a card, scaled by lap. Penalties are never scaled. */
+function cardRewardAp(state, playerIdx, ap) {
+  if (!(ap > 0)) return ap;
+  const m = lapMultiplier(state, playerIdx);
+  return m > 1 ? Math.round(ap * m) : ap;
+}
+
+/** Log suffix that shows the lap multiplier when one applies. */
+function lapNote(state, playerIdx, why) {
+  const m = lapMultiplier(state, playerIdx);
+  return m > 1 ? `${why} [lap ${m} ×${m}]` : why;
+}
+
+/* ---- Wager to Play: double or nothing (RULES.md §6) ---- */
+
+/** Is this player's wager still on the table? Rooms expose the flag only. */
+function wagerOpen(p) {
+  if (!p) return false;
+  return p.wagerOpen === true || (p.wagerApAt !== null && p.wagerApAt !== undefined);
+}
+
+/** Cards you may wager on: the ones you answer yourself. Duels belong to the
+ *  whole table, so there is no single outcome to bet on. */
+function wagerEligible(card) {
+  return !!card && ["scenario", "choice", "risk", "sabotage", "vote"].includes(card.type);
+}
+
+/** A new wager needs a free table slot and a fresh lap. */
+function canWager(state, playerIdx) {
+  const p = state && state.players ? state.players[playerIdx] : null;
+  if (!p) return false;
+  if (wagerOpen(p)) return false;
+  if (p.wagerLap !== null && p.wagerLap !== undefined && p.wagerLap === p.lapsDone) return false;
+  return true;
+}
+
+/** Put the stake on the table. The card's own AP swing decides the payout. */
+function takeWager(state, playerIdx) {
+  const p = state.players[playerIdx];
+  if (!canWager(state, playerIdx)) return false;
+  p.wagerApAt = p.ap;
+  p.wagerLap = p.lapsDone;
+  log(`💸 ${p.name} wagers ${WAGER.STAKE_AP} AP — double or nothing.`, "warn");
+  if (HAS_DOM) renderScoreboard();
+  return true;
+}
+
+/** Settle the open wager once the card has paid out: a gain doubles and the
+ *  stake rides; no gain (or a loss) forfeits the stake. */
+function settleWager(state, playerIdx) {
+  const p = state && state.players ? state.players[playerIdx] : null;
+  if (!p || !wagerOpen(p) || p.wagerApAt === null || p.wagerApAt === undefined) return null;
+  const gain = p.ap - p.wagerApAt;
+  p.wagerApAt = null;
+  if (p.wagerOpen !== undefined) p.wagerOpen = false;
+  if (gain > 0) {
+    p.stats.wagersWon = (p.stats.wagersWon || 0) + 1;
+    applyDeltas(state, playerIdx, gain, 0, "(wager won — doubled)");
+    return { hit: true, gain };
+  }
+  p.stats.wagersLost = (p.stats.wagersLost || 0) + 1;
+  applyDeltas(state, playerIdx, -WAGER.STAKE_AP, 0, "(wager lost)");
+  return { hit: false, gain };
+}
+
+/** Bots gamble when they are behind: trailing bots wager often, leaders rarely. */
+function aiMaybeWager(state, card) {
+  const p = cur();
+  if (!p || !p.isAI || !wagerEligible(card) || !canWager(state, state.current)) return false;
+  const leader = Math.max(...state.players.map((x) => x.ap));
+  const chance = p.ap < leader ? 0.45 : 0.12;
+  if (rngNext(state) >= chance) return false;
+  return takeWager(state, state.current);
+}
+
+/* ---- Screw token: rush a rival's answer (RULES.md §6) ---- */
+
+/** Cards a screw can land on: one player answers, so one player can be rushed. */
+function screwEligible(card) {
+  return !!card && ["scenario", "choice", "risk", "sabotage", "vote"].includes(card.type);
+}
+
+/** The screw currently on the clock, if any (rooms send it as remaining ms). */
+function screwOpen(state) {
+  const sc = state && state.screw;
+  if (!sc) return null;
+  if (sc.deadline === undefined && sc.ms !== undefined) sc.deadline = Date.now() + sc.ms;
+  return sc;
+}
+
+/** A screw needs a rival's card on the table, a free token, and a clear table. */
+function canScrew(state, atkIdx) {
+  const p = state && state.players ? state.players[atkIdx] : null;
+  if (!p) return false;
+  if (state.phase !== "resolving" || !state.activeCard) return false;
+  if (atkIdx === state.current) return false;            // never your own card
+  if (screwOpen(state)) return false;                    // one at a time
+  if (p.screwLap !== null && p.screwLap !== undefined && p.screwLap === p.lapsDone) return false;
+  return screwEligible(CARD_BY_ID[state.activeCard]);
+}
+
+/** Spend the token: the target has SCREW.SECONDS to commit. */
+function takeScrew(state, atkIdx) {
+  if (!canScrew(state, atkIdx)) return false;
+  const atk = state.players[atkIdx];
+  const target = state.players[state.current];
+  atk.screwLap = atk.lapsDone;
+  atk.stats.screwsUsed = (atk.stats.screwsUsed || 0) + 1;
+  state.screw = { by: atkIdx, target: state.current, cardId: state.activeCard, apAt: target.ap, deadline: Date.now() + SCREW.SECONDS * 1000 };
+  log(`😈 ${atk.name} SCREWS ${target.name} — ${SCREW.SECONDS} seconds to answer.`, "warn");
+  return true;
+}
+
+/** Settle the screw once its card has paid out. The attacker eats
+ *  SCREW.ATTACKER_AP when the target still comes out ahead. */
+function settleScrew(state) {
+  const sc = state && state.screw;
+  if (!sc) return null;
+  if (sc.cardId !== state.activeCard) return null;
+  state.screw = null;
+  const atk = state.players[sc.by], target = state.players[sc.target];
+  if (!atk || !target) return null;
+  const gain = target.ap - sc.apAt;
+  if (gain > 0) {
+    atk.stats.screwsBackfired = (atk.stats.screwsBackfired || 0) + 1;
+    applyDeltas(state, sc.by, -SCREW.ATTACKER_AP, 0, "(screw backfired — they still scored)");
+    return { won: false, gain };
+  }
+  atk.stats.screwsLanded = (atk.stats.screwsLanded || 0) + 1;
+  applyDeltas(state, sc.target, -SCREW.TARGET_AP, SCREW.TARGET_SP, "(screwed — answered cold)");
+  applyDeltas(state, sc.by, SCREW.ATTACKER_AP, 0, "(screw paid off)");
+  return { won: true, gain };
+}
+
+/** The panicked answer when the clock runs out (or a rushed bot loses its head). */
+function screwPassResponse(card) {
+  switch (card && card.type) {
+    case "scenario":
+    case "choice": return { kind: "refuse" };
+    case "risk": return { kind: "risk-chicken" };
+    case "sabotage": return { kind: "sabotage-skip" };
+    default: return { kind: "none" };
+  }
+}
+
+/** A rushed bot keeps its head part of the time; otherwise it panics and passes. */
+function screwRushResponse(state, card) {
+  if (rngNext(state) < SCREW.RUSH_SUCCESS) return aiRespondToCard(state, card);
+  return screwPassResponse(card);
+}
+
+/** Is this player the one under the gun? */
+function screwTargetedAt(state, idx) {
+  const sc = screwOpen(state);
+  return !!sc && sc.target === idx;
+}
+
+/** Bots only rush humans — a bot forced to "answer immediately" is just a bot. */
+function aiMaybeScrew(state) {
+  const target = cur();
+  if (!target || target.isAI || !screwEligible(CARD_BY_ID[state.activeCard])) return false;
+  const cands = state.players
+    .map((p, i) => ({ p, i }))
+    .filter(({ p, i }) => i !== state.current && p.isAI && canScrew(state, i));
+  if (!cands.length) return false;
+  const atk = cands.reduce((a, b) => (b.p.ap > a.p.ap ? b : a));
+  if (rngNext(state) >= 0.18) return false;
+  return takeScrew(state, atk.i);
+}
+
+/** Which seat (if any) may spend a screw token right now. */
+function localScrewActor(state) {
+  if (!state || !state.players) return -1;
+  if (state.mode === "room") {
+    const me = (state.room && state.room.playerId) || (typeof MP !== "undefined" && MP.playerId) || null;
+    if (!me) return -1;
+    const i = state.players.findIndex((p) => p.id === me);
+    return i >= 0 && canScrew(state, i) ? i : -1;
+  }
+  for (let i = 0; i < state.players.length; i++) {
+    if (!state.players[i].isAI && canScrew(state, i)) return i;
+  }
+  return -1;
+}
+
+let screwTick = null;
+function clearScrewTimer() { if (screwTick) { clearInterval(screwTick); screwTick = null; } }
+
+/** Count the clock down on the card and answer for a human who freezes. */
+function armScrewTimer(state) {
+  clearScrewTimer();
+  if (!HAS_DOM || !state) return;
+  const sc = screwOpen(state);
+  if (!sc || sc.target !== state.current) return;
+  const box = $("card-screw");
+  const deadline = sc.deadline;
+  screwTick = setInterval(() => {
+    const s = G.state;
+    if (!s || !screwOpen(s) || s.screw.deadline !== deadline) { clearScrewTimer(); return; }
+    const secs = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    if (box) box.textContent = `⏱️ SCREWED — answer NOW. ${secs}s before the card answers for you.`;
+    if (secs <= 0) {
+      clearScrewTimer();
+      const card = CARD_BY_ID[s.activeCard];
+      if (card) submitResponse(screwPassResponse(card));
+    }
+  }, 250);
+}
+
+/** Split-the-Room scoring: closeness to a 50/50 table is the reward.
+ *  Unanimous with 3+ voters means nobody argued, which is its own shame. */
+function splitScore(card, yes, no) {
+  const n = yes + no;
+  const closeness = n ? 1 - Math.abs(yes - no) / n : 0;
+  return {
+    ap: 1 + Math.round((card.splitAp || 4) * closeness),
+    pct: Math.round(closeness * 100),
+    unanimous: n >= 3 && (yes === 0 || no === 0),
+  };
+}
+
+/** Apply a dilemma's payoff to the player who raised it. */
+function applySplitResult(card, result) {
+  const s = G.state;
+  const p = cur();
+  const res = splitScore(card, result.yes, result.no);
+  p.stats.dilemmas = (p.stats.dilemmas || 0) + 1;
+  p.stats.bestSplit = Math.max(p.stats.bestSplit || 0, res.pct);
+  log(`🪓 The table split ${result.tally} — ${res.pct}% divisive.`);
+  applyDeltas(s, s.current, cardRewardAp(s, s.current, res.ap), res.unanimous ? 1 : 0,
+    lapNote(s, s.current, res.unanimous ? "(unanimous — how boring)" : "(divisive dilemma)"));
 }
 
 /** Entry point after movement: resolve the landed tile (deals cards). */
@@ -328,6 +581,8 @@ function resolveTile() {
 function resolveNext() {
   const s = G.state;
   if (s.phase === "game-over") return;
+  settleWager(s, s.current); // an open wager settles with the card that carried it
+  settleScrew(s);            // so does an open screw
   const id = s.pending.shift();
   if (!id) { finishTile(true); return; }
   s.activeCard = id;
@@ -339,11 +594,25 @@ function resolveNext() {
 /** Called after every card on the tile is dealt with. combo counts on final. */
 function finishTile(tileCompleted) {
   const s = G.state;
+  settleWager(s, s.current);
+  settleScrew(s);
   const p = cur();
   if (tileCompleted && s.comboEligible && p) {
     p.ap += PENALTY.FINAL_COMBO_BONUS_AP;
     log(`🏆 ${p.name} survived the FINAL COMBO! +${PENALTY.FINAL_COMBO_BONUS_AP} AP. Legendary.`);
     if (HAS_DOM) renderScoreboard();
+  }
+  // Bullseye from behind the leader: roll again instead of ending the turn.
+  if (p && s.extraRollFor !== null && s.extraRollFor !== undefined && s.extraRollFor === s.current) {
+    s.extraRollFor = null;
+    s.activeCard = null;
+    s.comboEligible = false;
+    s.die = null;
+    s.phase = "await-roll";
+    bump();
+    log(`🎯 ${p.name} takes the bonus roll!`, "good");
+    if (HAS_DOM) { renderAll(); scheduleAiTurnIfNeeded(); }
+    return;
   }
   s.activeCard = null;
   s.comboEligible = false;
@@ -365,60 +634,79 @@ function finishTile(tileCompleted) {
  */
 function startVote(opts) {
   const s = G.state;
-  const voters = s.players.filter((_, i) => i !== s.current);
+  const voters = opts.voters
+    ? opts.voters.slice()
+    : s.players.map((_, i) => i).filter((i) => i !== s.current);
   s.vote = {
     seq: ++s.voteSeq,
     context: opts.context,
     cardId: opts.card ? opts.card.id : null,
     mode: opts.mode || "majority",
     labels: opts.labels,
+    texts: opts.texts || null,  // duel: the two anonymous answers on the block
+    voters,                     // player indices allowed to vote
     verdicts: {},               // playerId -> 'yes' | 'no'
+    quiet: !!opts.quiet,        // duel: keep the result inline, not full-screen
     onDone: opts.onDone,        // local UI only
   };
   s.phase = "await-vote";
   bump();
   const judged = cur();
-  for (const v of voters) {
-    if (v.isAI) {
-      s.vote.verdicts[v.id] = aiVoteOnPlayer(s, v, s.current, opts.context);
-      botBanter("judge", v, { target: judged.name });
-    }
+  for (const vi of voters) {
+    const v = s.players[vi];
+    if (!v || !v.isAI) continue;
+    s.vote.verdicts[v.id] = opts.context === "duel"
+      ? aiVoteOnDuel(s, v, opts.texts || [])
+      : aiVoteOnPlayer(s, v, s.current, opts.context);
+    if (opts.context !== "duel") botBanter("judge", v, { target: judged.name });
   }
-  if (HAS_DOM) openVoteModal();
+  if (HAS_DOM) { if (opts.context === "duel") renderDuelModal(); else openVoteModal(); }
   maybeFinishVote();
 }
 
 /** True when every voter has weighed in. */
 function voteComplete(state) {
   if (!state.vote) return true;
-  const voters = state.players.filter((_, i) => i !== state.current);
+  const voters = state.vote.voters
+    ? state.vote.voters.map((i) => state.players[i]).filter(Boolean)
+    : state.players.filter((_, i) => i !== state.current);
   return voters.every((v) => state.vote.verdicts[v.id] === "yes" || state.vote.verdicts[v.id] === "no");
 }
 
 /** Tally + finish the vote when complete. */
 function maybeFinishVote() {
   const s = G.state;
-  if (!s.vote || !voteComplete(s)) { if (HAS_DOM) renderVoteModal(); return; }
-  const votes = s.players
-    .filter((_, i) => i !== s.current)
-    .map((v) => ({ name: v.name, avatar: v.avatar, verdict: s.vote.verdicts[v.id] || "abstain" }));
+  if (!s.vote || !voteComplete(s)) {
+    if (HAS_DOM) { if (s.vote && s.vote.context === "duel") renderDuelModal(); else renderVoteModal(); }
+    return;
+  }
+  const voterList = s.vote.voters
+    ? s.vote.voters.map((i) => s.players[i]).filter(Boolean)
+    : s.players.filter((_, i) => i !== s.current);
+  const votes = voterList.map((v) => ({ name: v.name, avatar: v.avatar, verdict: s.vote.verdicts[v.id] || "abstain" }));
   const yes = votes.filter((v) => v.verdict === "yes").length;
   const no = votes.filter((v) => v.verdict === "no").length;
   const succeeded = s.vote.mode === "unanimous" ? no === 0 && yes > 0 : yes >= no;
   // Bots announce their verdicts (targeted at whoever is being judged).
-  s.players.forEach((v, i) => {
-    if (!v.isAI || i === s.current) return;
-    const vd = votes.find((x) => x.name === v.name);
-    if (vd && (vd.verdict === "yes" || vd.verdict === "no")) {
-      botBanter(vd.verdict === "yes" ? "voteYes" : "voteNo", v, { target: cur().name });
-    }
-  });
-  const result = { yes, no, tally: `${yes}–${no}`, succeeded, votes, context: s.vote.context, labels: s.vote.labels };
+  if (s.vote.context !== "duel") {
+    s.players.forEach((v, i) => {
+      if (!v.isAI || i === s.current) return;
+      const vd = votes.find((x) => x.name === v.name);
+      if (vd && (vd.verdict === "yes" || vd.verdict === "no")) {
+        botBanter(vd.verdict === "yes" ? "voteYes" : "voteNo", v, { target: cur().name });
+      }
+    });
+  }
+  const splitPct = s.vote.mode === "split"
+    ? Math.round(100 * (1 - Math.abs(yes - no) / Math.max(1, yes + no)))
+    : null;
+  const result = { yes, no, tally: `${yes}–${no}`, succeeded, votes, context: s.vote.context, labels: s.vote.labels, mode: s.vote.mode, splitPct, texts: s.vote.texts || null };
   const done = s.vote.onDone;
+  const quiet = s.vote.quiet;
   s.vote = null;
   s.phase = "resolving";
   bump();
-  if (HAS_DOM) showVoteResults(result, done);
+  if (HAS_DOM && !quiet) showVoteResults(result, done);
   else done && done(result);
 }
 
@@ -427,14 +715,304 @@ function castHumanVote(verdict) {
   const s = G.state;
   if (!s.vote || s.phase !== "await-vote") return;
   if (verdict !== "yes" && verdict !== "no") return;
-  const pendingHuman = s.players.find(
-    (v) => !v.isAI && v.id !== cur().id && !s.vote.verdicts[v.id]
-  );
+  const voterList = s.vote.voters
+    ? s.vote.voters.map((i) => s.players[i]).filter(Boolean)
+    : s.players.filter((_, i) => i !== s.current);
+  const pendingHuman = voterList.find((v) => !v.isAI && !s.vote.verdicts[v.id]);
   if (!pendingHuman) return;
   s.vote.verdicts[pendingHuman.id] = verdict;
   SFX.play("vote");
   bump();
   maybeFinishVote();
+}
+
+/* ---- Duel rounds (Quiplash-style head-to-heads) ----------------------------
+ * A duel card stops the normal card flow: every player writes one answer, the
+ * answers are shuffled into anonymous pairs, and the rest of the table votes on
+ * each pair. AP is paid by vote share, so a funny loser still scores. */
+
+const DUEL_SHARE_AP = 4;      // max AP from vote share alone
+const DUEL_WIN_BONUS = 2;     // winning a pairing
+const DUEL_SWEEP_BONUS = 4;   // winning every vote
+const DUEL_BYE_AP = 2;        // odd player out
+const DUEL_BLANK_ANSWER = "(said nothing, stared into the middle distance)";
+
+/** Head-to-head payoff. AP is paid by vote share, plus a bonus for winning; a
+ *  unanimous sweep pays more, and a tie pays both duelists +1. */
+function duelShare(aVotes, bVotes) {
+  const n = aVotes + bVotes;
+  if (!n) return { apA: DUEL_BYE_AP, apB: DUEL_BYE_AP, winner: "tie", sweep: false, pctA: 50, pctB: 50 };
+  const sweep = aVotes === 0 || bVotes === 0;
+  const pctA = Math.round((100 * aVotes) / n);
+  if (aVotes === bVotes) {
+    const ap = Math.round((DUEL_SHARE_AP * aVotes) / n) + 1;
+    return { apA: ap, apB: ap, winner: "tie", sweep: false, pctA, pctB: 100 - pctA };
+  }
+  const bonus = sweep ? DUEL_SWEEP_BONUS : DUEL_WIN_BONUS;
+  const apA = Math.round((DUEL_SHARE_AP * aVotes) / n) + (aVotes > bVotes ? bonus : 0);
+  const apB = Math.round((DUEL_SHARE_AP * bVotes) / n) + (bVotes > aVotes ? bonus : 0);
+  return { apA, apB, winner: aVotes > bVotes ? "a" : "b", sweep, pctA, pctB: 100 - pctA };
+}
+
+/** Pick an unused canned answer for an AI duelist. */
+function aiDuelAnswer(state, card, playerIdx) {
+  const answers = (state.duel && state.duel.answers) || {};
+  const used = Object.keys(answers).filter((k) => Number(k) !== playerIdx).map((k) => answers[k]);
+  const pool = ((card && card.answers) || []).filter((a) => !used.includes(a));
+  if (!pool.length) return DUEL_BLANK_ANSWER;
+  return pool[rngInt(state, pool.length)];
+}
+
+/** Which AI answer does this voter prefer? Longer answers read as more effort,
+ *  with a chaos roll for unpredictability. */
+function aiVoteOnDuel(state, ai, texts) {
+  const prof = AI_PROFILES[ai.personality] || AI_PROFILES.chill;
+  if (rngNext(state) < prof.chaos) return rngNext(state) < 0.5 ? "yes" : "no";
+  const a = String((texts && texts[0]) || "");
+  const b = String((texts && texts[1]) || "");
+  const longerPicksA = a.length >= b.length;
+  if (rngNext(state) < 0.65) return longerPicksA ? "yes" : "no";
+  return rngNext(state) < 0.5 ? "yes" : "no";
+}
+
+/** Normalise answer text for duplicate detection: case- and punctuation-blind. */
+function normDuelAnswer(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Matching answers cancel each other (index -> true). A safe answer (submitted
+ *  blank) never cancels anyone and is never cancelled itself. */
+function findDuelDuplicates(state) {
+  const duel = (state && state.duel) || {};
+  const answers = duel.answers || {};
+  const safety = duel.safety || {};
+  const blank = normDuelAnswer(DUEL_BLANK_ANSWER);
+  const groups = new Map();
+  Object.keys(answers).forEach((k) => {
+    const i = Number(k);
+    if (safety[i]) return;
+    const n = normDuelAnswer(answers[k]);
+    if (!n || n === blank) return;
+    if (!groups.has(n)) groups.set(n, []);
+    groups.get(n).push(i);
+  });
+  const dupes = {};
+  groups.forEach((list) => { if (list.length > 1) list.forEach((i) => { dupes[i] = true; }); });
+  return dupes;
+}
+
+/** Safety Quip: a blank / auto-filled answer only earns half its AP. */
+function duelSafetyAp(ap, safety) {
+  return safety ? Math.floor(ap / 2) : ap;
+}
+
+/** Player ids who have already written an answer (local or room state). */
+function duelAnswered(state) {
+  const d = (state && state.duel) || {};
+  if (d.answered && typeof d.answered === "object") {
+    return Object.keys(d.answered).filter((id) => d.answered[id]);
+  }
+  return Object.keys(d.answers || {})
+    .map((k) => state.players[Number(k)])
+    .filter(Boolean)
+    .map((p) => p.id);
+}
+
+/** Human indices still owing an answer. */
+function duelPendingHumans(state) {
+  if (!state || !state.duel) return [];
+  const answered = duelAnswered(state);
+  return state.players
+    .map((_, i) => i)
+    .filter((i) => !state.players[i].isAI && !answered.includes(state.players[i].id));
+}
+
+/** Open a duel: everybody writes, AI answers land immediately. */
+function startDuel(card) {
+  const s = G.state;
+  if (!card || card.type !== "duel") { resolveNext(); return; }
+  s.duel = { cardId: card.id, answers: {}, safety: {}, duplicates: {}, pairs: [], pair: 0, results: [] };
+  s.phase = "await-duel";
+  bump();
+  log(`⚔️ DUEL: “${card.title}” — everyone writes an answer.`);
+  for (let i = 0; i < s.players.length; i++) {
+    if (s.players[i].isAI) s.duel.answers[i] = aiDuelAnswer(s, card, i);
+  }
+  // Headless runs (tests, solo bot games) cannot type: fill the humans in.
+  if (!HAS_DOM || s.mode === "test-auto") {
+    for (let i = 0; i < s.players.length; i++) {
+      if (s.duel.answers[i] === undefined) {
+        s.duel.answers[i] = DUEL_BLANK_ANSWER;
+        s.duel.safety[i] = true; // Safety Quip: half credit, never a duplicate
+      }
+    }
+  }
+  if (HAS_DOM) renderDuelModal();
+  maybeFinishDuelAnswers();
+}
+
+/** Submit the local human's duel answer (hotseat: one at a time). */
+function submitDuelAnswer(text) {
+  const s = G.state;
+  if (!s || !s.duel || s.phase !== "await-duel") return;
+  const clean = String(text || "").trim().slice(0, 90);
+  if (s.mode === "room") { MP.action({ type: "duel-answer", text: clean }); return; }
+  const pending = duelPendingHumans(s);
+  if (!pending.length) return;
+  s.duel.answers[pending[0]] = clean || DUEL_BLANK_ANSWER;
+  if (!s.duel.safety) s.duel.safety = {};
+  if (clean) delete s.duel.safety[pending[0]];
+  else s.duel.safety[pending[0]] = true;
+  bump();
+  if (HAS_DOM) renderDuelModal();
+  maybeFinishDuelAnswers();
+}
+
+/** Pair every duelist; an odd player out takes a bye. */
+function pairDuelists(s) {
+  const order = s.players.map((_, i) => i);
+  shuffleArr(order, s);
+  s.duel.pairs = [];
+  for (let i = 0; i < order.length; i += 2) {
+    s.duel.pairs.push([order[i], order[i + 1] === undefined ? -1 : order[i + 1]]);
+  }
+  s.duel.pair = 0;
+  s.duel.duplicates = findDuelDuplicates(s);
+  const bouts = s.duel.pairs.filter((p) => p[1] >= 0).length;
+  log(`⚔️ The duel draws ${bouts} pairing${bouts === 1 ? "" : "s"}. First up…`);
+  const dupes = Object.keys(s.duel.duplicates).length;
+  if (dupes) log(`🚫 ${dupes} duplicate answer${dupes === 1 ? "" : "s"} cancelled — no points for unoriginality.`);
+  bump();
+}
+
+/** All answers in: pair the table and start the first head-to-head vote. */
+function maybeFinishDuelAnswers() {
+  const s = G.state;
+  if (!s.duel || s.phase !== "await-duel") return;
+  if (s.players.some((_, i) => s.duel.answers[i] === undefined)) {
+    if (HAS_DOM) renderDuelModal();
+    return;
+  }
+  pairDuelists(s);
+  startDuelVote();
+}
+
+/** Start the current pairing's vote (or resolve a bye / no-jury pairing). */
+function startDuelVote() {
+  const s = G.state;
+  if (!s.duel) { resolveNext(); return; }
+  const pair = s.duel.pairs[s.duel.pair];
+  if (!pair) { finishDuel(); return; }
+  const [ai, bi] = pair;
+  const safety = s.duel.safety || {};
+  if (bi < 0) {
+    const safe = !!safety[ai];
+    const ap = duelSafetyAp(cardRewardAp(s, ai, DUEL_BYE_AP), safe);
+    s.duel.results.push({ aIdx: ai, bIdx: -1, aName: s.players[ai].name, bName: "—", aVotes: 0, bVotes: 0, apA: ap, apB: 0, winner: "bye", safetyA: safe });
+    applyDeltas(s, ai, ap, 0, lapNote(s, ai, safe ? "(duel bye — safe answer ×½)" : "(duel bye — no opponent)"));
+    nextDuelPair();
+    return;
+  }
+  const texts = [s.duel.answers[ai], s.duel.answers[bi]];
+
+  // Duplicate cancellation: matching answers score nothing and skip the vote.
+  const dupes = s.duel.duplicates || {};
+  const dupA = !!dupes[ai];
+  const dupB = !!dupes[bi];
+  if (dupA || dupB) {
+    const apA = dupA ? 0 : cardRewardAp(s, ai, DUEL_WIN_BONUS);
+    const apB = dupB ? 0 : cardRewardAp(s, bi, DUEL_WIN_BONUS);
+    const winner = dupA && dupB ? "tie" : dupA ? "b" : "a";
+    s.duel.results.push({
+      aIdx: ai, bIdx: bi, aName: s.players[ai].name, bName: s.players[bi].name,
+      aVotes: 0, bVotes: 0, apA, apB, winner, cancelled: true,
+    });
+    log(`🚫 “${texts[0]}” vs “${texts[1]}” — duplicate answer, cancelled.`);
+    if (!dupA) applyDeltas(s, ai, apA, 0, lapNote(s, ai, "(pairing won by default)"));
+    if (!dupB) applyDeltas(s, bi, apB, 0, lapNote(s, bi, "(pairing won by default)"));
+    nextDuelPair();
+    return;
+  }
+
+  const voters = s.players.map((_, i) => i).filter((i) => i !== ai && i !== bi);
+  if (!voters.length) {
+    // Two-player table (or a pair with no jury): both take a flat 2 AP.
+    const safeA = !!safety[ai];
+    const safeB = !!safety[bi];
+    const apA = duelSafetyAp(cardRewardAp(s, ai, DUEL_BYE_AP), safeA);
+    const apB = duelSafetyAp(cardRewardAp(s, bi, DUEL_BYE_AP), safeB);
+    s.duel.results.push({ aIdx: ai, bIdx: bi, aName: s.players[ai].name, bName: s.players[bi].name, aVotes: 0, bVotes: 0, apA, apB, winner: "tie", safetyA: safeA, safetyB: safeB });
+    log(`⚔️ ${s.players[ai].name} vs ${s.players[bi].name} — no jury, both take ${DUEL_BYE_AP} AP.`);
+    applyDeltas(s, ai, apA, 0, lapNote(s, ai, safeA ? "(duel — no jury, safe ×½)" : "(duel — no jury)"));
+    applyDeltas(s, bi, apB, 0, lapNote(s, bi, safeB ? "(duel — no jury, safe ×½)" : "(duel — no jury)"));
+    nextDuelPair();
+    return;
+  }
+  startVote({
+    context: "duel", card: CARD_BY_ID[s.duel.cardId], mode: "majority",
+    labels: ["Answer A", "Answer B"], texts, voters, quiet: true,
+    onDone: (r) => finishDuelPair(ai, bi, r.yes, r.no),
+  });
+}
+
+/** Pay a pairing's result and move to the next one. */
+function finishDuelPair(ai, bi, aVotes, bVotes) {
+  const s = G.state;
+  if (!s.duel) return;
+  const sh = duelShare(aVotes, bVotes);
+  const a = s.players[ai], b = s.players[bi];
+  const safety = s.duel.safety || {};
+  const safeA = !!safety[ai];
+  const safeB = !!safety[bi];
+  const apA = duelSafetyAp(cardRewardAp(s, ai, sh.apA), safeA);
+  const apB = duelSafetyAp(cardRewardAp(s, bi, sh.apB), safeB);
+  s.duel.results.push({
+    aIdx: ai, bIdx: bi, aName: a.name, bName: b.name,
+    aVotes, bVotes, apA, apB, winner: sh.winner, sweep: sh.sweep,
+    safetyA: safeA, safetyB: safeB,
+  });
+  log(`⚔️ ${a.name} ${aVotes}–${bVotes} ${b.name} — “${s.duel.answers[ai]}” vs “${s.duel.answers[bi]}”`);
+  applyDeltas(s, ai, apA, 0, lapNote(s, ai, safeA ? `(duel share ${sh.pctA}%, safe ×½)` : `(duel share ${sh.pctA}%)`));
+  applyDeltas(s, bi, apB, 0, lapNote(s, bi, safeB ? `(duel share ${sh.pctB}%, safe ×½)` : `(duel share ${sh.pctB}%)`));
+  if (sh.winner === "a") a.stats.duelsWon++;
+  else if (sh.winner === "b") b.stats.duelsWon++;
+  if (sh.sweep) log(`🧹 A unanimous sweep! “${sh.winner === "a" ? s.duel.answers[ai] : s.duel.answers[bi]}” takes it all.`);
+  nextDuelPair();
+}
+
+function nextDuelPair() {
+  const s = G.state;
+  if (!s.duel) return;
+  s.duel.pair++;
+  bump();
+  if (s.duel.pair < s.duel.pairs.length) startDuelVote();
+  else finishDuel();
+}
+
+/** Every pairing is done: show the summary (local) and hand the turn back. */
+function finishDuel() {
+  const s = G.state;
+  if (!s.duel) { resolveNext(); return; }
+  if (HAS_DOM && s.mode === "local") {
+    s.duel.done = true;
+    bump();
+    renderDuelModal();
+    return;
+  }
+  endDuel();
+}
+
+function endDuel() {
+  const s = G.state;
+  s.duel = null;
+  s.phase = "resolving";
+  if (HAS_DOM) { closeModal("#duel-modal"); }
+  bump();
+  resolveNext();
 }
 
 /* ============================================================================
@@ -561,8 +1139,8 @@ function computeAwards(state) {
   const rank = ranking(state);
   const most = (key) => {
     let best = null;
-    for (const p of state.players) if (!best || p.stats[key] > best.stats[key]) best = p;
-    return best && best.stats[key] > 0 ? best : null;
+    for (const p of state.players) if (!best || (p.stats[key] || 0) > (best.stats[key] || 0)) best = p;
+    return best && (best.stats[key] || 0) > 0 ? best : null;
   };
   return {
     winner: rank[0],
@@ -570,6 +1148,8 @@ function computeAwards(state) {
     mostHonest: most("confessions"),
     mostSabotaged: most("timesSabotaged"),
     chaosGremlin: most("chaosTriggered"),
+    mostDivisive: most("bestSplit"),
+    duelChampion: most("duelsWon"),
   };
 }
 
@@ -649,6 +1229,25 @@ function submitResponse(resp, said) {
   applyResponse(resp);
 }
 
+/** Wager button: local mode applies it now, room mode asks the server. */
+function submitWager() {
+  const s = G.state;
+  if (!s) return;
+  if (s.mode === "room") { MP.action({ type: "wager" }); return; }
+  if (!takeWager(s, s.current)) return;
+  if (HAS_DOM && s.activeCard) showCard(CARD_BY_ID[s.activeCard]);
+}
+
+/** Screw button: local mode spends the token now, room mode asks the server. */
+function submitScrew(atkIdx) {
+  const s = G.state;
+  if (!s) return;
+  if (s.mode === "room") { MP.action({ type: "screw" }); return; }
+  const actor = atkIdx === undefined ? localScrewActor(s) : atkIdx;
+  if (actor < 0 || !takeScrew(s, actor)) return;
+  if (HAS_DOM && s.activeCard) showCard(CARD_BY_ID[s.activeCard]);
+}
+
 /** Other players react briefly to a human's spoken answer (solo mode). */
 function botBanterReact(said) {
   if (!G.state || G.state.mode !== "local") return;
@@ -724,7 +1323,7 @@ function applyResponseInner(resp, card) {
   switch (resp.kind) {
     case "do": {
       cur().stats.confessions++;
-      applyDeltas(s, s.current, card.ap, card.sp, "(did it)");
+      applyDeltas(s, s.current, cardRewardAp(s, s.current, card.ap), card.sp, lapNote(s, s.current, "(did it)"));
       botBanter("scenarioDo", cur(), { card: card.title });
       resolveNext();
       break;
@@ -737,7 +1336,7 @@ function applyResponseInner(resp, card) {
           const p = cur();
           if (r.succeeded) {
             p.stats.bluffsBelieved++;
-            applyDeltas(s, s.current, card.ap + 1, card.sp, `(bluff believed ${r.tally}, +1 style)`);
+            applyDeltas(s, s.current, cardRewardAp(s, s.current, card.ap + 1), card.sp, lapNote(s, s.current, `(bluff believed ${r.tally}, +1 style)`));
           } else {
             p.stats.bluffsCaught++;
             applyDeltas(s, s.current, -card.ap, card.ap, `(CAUGHT lying ${r.tally})`);
@@ -758,7 +1357,7 @@ function applyResponseInner(resp, card) {
     case "choice": {
       const opt = card[resp.side];
       if (!opt) { resolveNext(); break; }
-      applyDeltas(s, s.current, opt.ap, opt.sp, `(${resp.side.toUpperCase()})`);
+      applyDeltas(s, s.current, cardRewardAp(s, s.current, opt.ap), opt.sp, lapNote(s, s.current, `(${resp.side.toUpperCase()})`));
       botBanter("choice", cur(), { opt: (opt.text || "").slice(0, 40) });
       resolveNext();
       break;
@@ -775,17 +1374,17 @@ function applyResponseInner(resp, card) {
       if (card.mech === "coin") {
         const flip = rngNext(s) < 0.5;
         log(`🪙 The coin spins… ${flip ? "HEADS" : "TAILS"}!`);
-        riskOutcome(card, flip);
+        riskOutcome(card, { heads: flip });
       } else if (card.mech === "die") {
         const r = rollDie(s);
-        log(`🎲 Fate rolls a ${r} (needs 4+).`);
-        riskOutcome(card, r >= 4);
+        log(`🎲 Fate rolls a ${r} — bullseye on a 6.`);
+        riskOutcome(card, { roll: r });
       } else { // believe
         startVote({
           context: "believe", card, mode: "majority", labels: ["Believe", "Doubt"],
           onDone: (r) => {
-            log(`🗣️ The group votes ${r.tally} — ${r.succeeded ? "they believe you!" : "they are NOT convinced."}`);
-            riskOutcome(card, r.succeeded);
+            log(`🗣️ The group votes ${r.tally} — ${r.yes}/${r.no}.`);
+            riskOutcome(card, { yes: r.yes, no: r.no });
           },
         });
       }
@@ -818,38 +1417,112 @@ function applyResponseInner(resp, card) {
     }
     case "none":
     default: {
-      // Vote cards resolve via the group; anything else just moves on.
+      // Vote cards resolve via the group, duels pull in the whole table,
+      // anything else just moves on.
       if (card.type === "vote") startCardVote(card);
+      else if (card.type === "duel") startDuel(card);
       else resolveNext();
       break;
     }
   }
 }
 
-/** Group vote triggered by a vote card (local path; server mirrors this). */
+/** Group vote triggered by a vote card (local path; server mirrors this).
+ *  Verdict cards ask Forgive/Punish; dilemma cards ask Yes/No and pay for
+ *  how evenly the table splits (Split the Room). */
 function startCardVote(card) {
+  const split = card.mode === "split";
   startVote({
-    context: "card", card, mode: card.mode || "majority", labels: ["Forgive", "Punish"],
+    context: "card", card, mode: card.mode || "majority",
+    labels: split ? ["Yes", "No"] : ["Forgive", "Punish"],
     onDone: (r) => {
-      if (r.succeeded) applyDeltas(G.state, G.state.current, card.forgive.ap, card.forgive.sp, `(forgiven ${r.tally})`);
-      else applyDeltas(G.state, G.state.current, card.punish.ap, card.punish.sp, `(punished ${r.tally})`);
+      const s = G.state;
+      if (split) {
+        applySplitResult(card, r);
+        resolveNext();
+        return;
+      }
+      if (r.succeeded) {
+        applyDeltas(s, s.current, cardRewardAp(s, s.current, card.forgive.ap), card.forgive.sp,
+          lapNote(s, s.current, `(forgiven ${r.tally})`));
+      } else {
+        applyDeltas(s, s.current, card.punish.ap, card.punish.sp, `(punished ${r.tally})`);
+      }
       resolveNext();
     },
   });
 }
 
-function riskOutcome(card, success) {
+/* ---- Risk bands: bullseye instead of pass/fail (RULES.md §6) ---- */
+
+/** Band table. Payouts scale the card's own reward so the deck stays balanced:
+ *  a bullseye doubles it, good pays it, near pays half, a miss takes the
+ *  penalty plus a shame point. Mirrored in rooms/lib.php. */
+const RISK_BANDS = {
+  bullseye: { mul: 2, label: "BULLSEYE!" },
+  good:     { mul: 1, label: "risk paid off!" },
+  near:     { mul: 0.5, label: "near miss — half" },
+  miss:     { mul: 0, label: "risk missed…" },
+};
+
+/** Grade a risk from the mechanic's own margin. A coin has no middle, so it
+ *  stays binary; dice and group votes get all four bands. */
+function riskBand(card, outcome) {
+  const mech = (card && card.mech) || "believe";
+  if (mech === "die") {
+    const r = (outcome && outcome.roll) || 0;
+    if (r >= 6) return "bullseye";
+    if (r >= 5) return "good";
+    if (r >= 4) return "near";
+    return "miss";
+  }
+  if (mech === "believe") {
+    const yes = (outcome && outcome.yes) || 0;
+    const no = (outcome && outcome.no) || 0;
+    if (yes + no === 0) return "near";
+    if (no === 0 && yes >= 2) return "bullseye";
+    if (yes > no) return "good";
+    if (yes === no) return "near";
+    return "miss";
+  }
+  return outcome && outcome.heads ? "good" : "miss";
+}
+
+/** AP/SP a band pays, using the card's own reward and penalty. */
+function riskPayout(card, band, state, playerIdx) {
+  const reward = (card && card.reward) || { ap: 0, sp: 0 };
+  const penalty = (card && card.penalty) || { ap: 0, sp: 0 };
+  const base = cardRewardAp(state, playerIdx, reward.ap || 0);
+  if (band === "miss") return { ap: penalty.ap || 0, sp: (penalty.sp || 0) + 1 };
+  if (band === "bullseye") return { ap: base * RISK_BANDS.bullseye.mul, sp: reward.sp || 0 };
+  if (band === "near") return { ap: Math.max(1, Math.round(base * RISK_BANDS.near.mul)), sp: 0 };
+  return { ap: base, sp: reward.sp || 0 };
+}
+
+function riskOutcome(card, outcome) {
   const s = G.state;
   const p = cur();
-  if (success) {
-    p.stats.risksWon++;
-    SFX.play("good");
-    applyDeltas(s, s.current, card.reward.ap, card.reward.sp, "(risk paid off!)");
-  } else {
+  const band = riskBand(card, outcome);
+  // "Behind the leader" is judged on the score BEFORE the card pays out.
+  const wasBehind = s.players.some((x) => x !== p && x.ap > p.ap);
+  const pay = riskPayout(card, band, s, s.current);
+  if (band === "miss") {
+    p.stats.risksLost = (p.stats.risksLost || 0) + 1;
     SFX.play("bad");
-    applyDeltas(s, s.current, card.penalty.ap, card.penalty.sp, "(risk failed…)");
+  } else {
+    p.stats.risksWon = (p.stats.risksWon || 0) + 1;
+    SFX.play("good");
   }
-  botBanter(success ? "riskWin" : "riskLose", p, { card: card.title });
+  applyDeltas(s, s.current, pay.ap, pay.sp, lapNote(s, s.current, `(${RISK_BANDS[band].label})`));
+  if (band === "bullseye") {
+    p.stats.bullseyes = (p.stats.bullseyes || 0) + 1;
+    log("🎯 BULLSEYE!", "good");
+    if (wasBehind) {
+      s.extraRollFor = s.current;
+      log(`🎯 ${p.name} nailed it from behind — bonus roll incoming!`, "good");
+    }
+  }
+  botBanter(band === "miss" ? "riskLose" : "riskWin", p, { card: card.title });
   resolveNext();
 }
 
@@ -860,15 +1533,17 @@ function resolveActiveCardForAI() {
   const s = G.state;
   const card = CARD_BY_ID[s.activeCard];
   if (!card) { resolveNext(); return; }
+  aiMaybeWager(s, card);
   // Headless/test mode: no timers, resolve synchronously so driver loops work.
   if (s.mode === "test-auto" || !HAS_DOM) {
-    applyResponse(aiRespondToCard(s, card));
+    applyResponse(screwTargetedAt(s, s.current) ? screwRushResponse(s, card) : aiRespondToCard(s, card));
     return;
   }
   const token = ++G.turnToken;
   setTimeout(() => {
     if (token !== G.turnToken || !G.state || G.state.phase !== "resolving" || G.state.activeCard !== card.id) return;
-    const resp = aiRespondToCard(s, card);
+    // A screwed bot loses its head: it may rush the pass/refuse line.
+    const resp = screwTargetedAt(s, s.current) ? screwRushResponse(s, card) : aiRespondToCard(s, card);
     applyResponse(resp);                       // effects land; banner via hooks below
   }, aiStepSeconds() * 1000);
 }
@@ -880,7 +1555,7 @@ function resolveActiveCardForAI() {
 function saveGame() {
   const s = G.state;
   if (!s) return;
-  if (s.phase === "resolving" || s.phase === "await-vote" || s.phase === "moving") {
+  if (s.phase === "resolving" || s.phase === "await-vote" || s.phase === "await-duel" || s.phase === "moving") {
     toast("Save is only available between turns.");
     return;
   }
@@ -907,7 +1582,9 @@ function loadGame() {
     if (HAS_DOM) {
       log("💾 Game loaded.");
       renderAll();
-      if (s.phase === "await-vote" && s.vote) openVoteModal();
+      if (s.phase === "await-vote" && s.vote) {
+        if (s.vote.context === "duel") renderDuelModal(); else openVoteModal();
+      }
     }
     return true;
   } catch (e) {
@@ -1039,8 +1716,14 @@ function syncUIFromState() {
     G.shownCardKey = null;
   }
 
+  // Duel modal (writing phase, head-to-head vote, or the final summary)
+  const inDuel = s.duel && (s.phase === "await-duel" || s.duel.done
+    || (s.phase === "await-vote" && s.vote && s.vote.context === "duel"));
+  if (inDuel) renderDuelModal();
+  else if ($("#duel-modal").classList.contains("open")) closeModal("#duel-modal");
+
   // Vote modal
-  if (s.phase === "await-vote" && s.vote) openVoteModal();
+  if (s.phase === "await-vote" && s.vote && s.vote.context !== "duel") openVoteModal();
   else if (s.phase !== "await-vote" && $("#vote-modal").classList.contains("open")) closeModal("#vote-modal");
 
   // Game over
@@ -1208,6 +1891,35 @@ function showCard(card) {
   const s = G.state;
   const p = cur();
   const human = isMyLocalTurn() && !p.isAI;
+  const onTheTable = wagerOpen(p);
+
+  // Bots spend their screw token to rush a human's card (local mode only).
+  if (human && s.mode !== "room" && !screwOpen(s)) aiMaybeScrew(s);
+
+  // Wager banner: a live wager rides the card; otherwise the offer is explained.
+  const wagerBox = $("card-wager");
+  if (wagerBox) {
+    wagerBox.hidden = !(human && wagerEligible(card) && (onTheTable || canWager(s, s.current)));
+    wagerBox.textContent = onTheTable
+      ? `💸 WAGER LIVE — ${WAGER.STAKE_AP} AP riding on this card. Win: doubled. Lose: the stake is gone.`
+      : `💸 Double or nothing — stake ${WAGER.STAKE_AP} AP to double this card's reward. Come out even or behind and the stake is gone. One wager per lap.`;
+  }
+
+  // Screw banner: a rival's token is running down someone's clock.
+  const screwNow = screwOpen(s);
+  const screwBox = $("card-screw");
+  if (screwBox) {
+    const secs = screwNow ? Math.max(0, Math.ceil((screwNow.deadline - Date.now()) / 1000)) : 0;
+    const atkName = screwNow ? ((s.players[screwNow.by] || {}).name || "Someone") : "";
+    const victim = screwNow ? ((s.players[screwNow.target] || {}).name || "someone") : "";
+    screwBox.hidden = !screwNow;
+    screwBox.classList.toggle("hot", !!screwNow);
+    if (screwNow) {
+      screwBox.textContent = (human && screwNow.target === s.current)
+        ? `⏱️ SCREWED by ${atkName} — answer NOW. ${secs}s before the card answers for you.`
+        : `😈 ${atkName} screwed ${victim} — ${secs}s on the clock.`;
+    }
+  }
 
   const addBtn = (label, cls, fn) => {
     const b = el("button", "btn " + cls, label);
@@ -1229,6 +1941,9 @@ function showCard(card) {
   };
 
   if (human) {
+    if (wagerEligible(card) && !onTheTable && canWager(s, s.current)) {
+      addBtn(`💸 Wager ${WAGER.STAKE_AP} AP (double or nothing)`, "btn-wager", () => submitWager());
+    }
     if (card.type === "scenario") {
       const said = answerBox();
       addBtn("✔ Do it (truth)", "btn-good", () => submitResponse({ kind: "do" }, said.value.trim()));
@@ -1252,10 +1967,19 @@ function showCard(card) {
       // The card wants a group decision: say your piece, then face the group.
       const said = answerBox();
       addBtn("🗣️ Face the group", "btn-warn", () => submitResponse({ kind: "none" }, said.value.trim()));
+    } else if (card.type === "duel") {
+      // Duel: everyone writes, so the card only opens the round.
+      addBtn("✍️ Everyone answers", "btn-warn", () => submitResponse({ kind: "none" }));
     }
   } else {
     const waitLabel = s.mode === "room" ? "waiting…" : "thinking…";
     actions.appendChild(el("div", "ai-thinking", `${p.avatar} ${p.name} is ${waitLabel}`));
+  }
+
+  // Screw: spend the token to rush whoever is on the card.
+  const screwActor = (human && s.mode !== "room") ? -1 : localScrewActor(s);
+  if (screwActor >= 0 && !screwNow) {
+    addBtn(`😈 Screw ${p.name} (${SCREW.SECONDS}s to answer)`, "btn-screw", () => submitScrew(screwActor));
   }
 
   // Clear any previous bot-answer banner, then show the current one if the
@@ -1275,6 +1999,7 @@ function showCard(card) {
     }
   }
 
+  armScrewTimer(s);
   modal.classList.add("open");
   SFX.play("card");
 
@@ -1308,6 +2033,101 @@ function openTargetPicker() {
   modal.classList.add("open");
 }
 
+/* ---- Duel modal (write phase + head-to-head votes) ---- */
+function renderDuelModal() {
+  if (!HAS_DOM) return;
+  const s = G.state;
+  const modal = $("#duel-modal");
+  if (!modal) return;
+  if (!s || !s.duel) { modal.classList.remove("open"); return; }
+  const card = CARD_BY_ID[s.duel.cardId];
+  $("#duel-badge").textContent = "DUEL" + (card ? " · " + card.id : "");
+  $("#duel-title").textContent = card ? card.title : "Head to Head";
+  $("#duel-prompt").textContent = card ? card.description : "";
+  const body = $("#duel-body"), status = $("#duel-status"), actions = $("#duel-actions");
+  body.innerHTML = ""; status.innerHTML = ""; actions.innerHTML = "";
+  const answered = duelAnswered(s);
+
+  (s.duel.results || []).forEach((r) => {
+    const tags = [];
+    if (r.cancelled) tags.push("duplicate — cancelled");
+    if (r.safetyA) tags.push("A safe ×½");
+    if (r.safetyB) tags.push("B safe ×½");
+    const suffix = tags.length ? ` · ${tags.join(" · ")}` : "";
+    body.appendChild(el("div", "duel-feed",
+      (r.bIdx === undefined || r.bIdx < 0)
+        ? `⚔️ ${r.aName} — bye (+${r.apA} AP)${suffix}`
+        : `⚔️ ${r.aName} ${r.aVotes}–${r.bVotes} ${r.bName} → +${r.apA} / +${r.apB} AP${suffix}`));
+  });
+
+  if (s.duel.done) {
+    body.appendChild(el("div", "duel-done", "That was the table's taste. Paid, logged, never mentioned again."));
+    const go = el("button", "btn btn-primary", "Continue");
+    go.onclick = () => endDuel();
+    actions.appendChild(go);
+    modal.classList.add("open");
+    return;
+  }
+
+  if (s.phase === "await-vote" && s.vote && s.vote.context === "duel") {
+    const texts = s.vote.texts || ["…", "…"];
+    const opts = el("div", "duel-options");
+    ["A", "B"].forEach((tag, i) => {
+      const o = el("div", "duel-option");
+      o.appendChild(el("span", "duel-option-tag", tag));
+      o.appendChild(el("span", "duel-option-text", texts[i] || "…"));
+      opts.appendChild(o);
+    });
+    body.appendChild(opts);
+    const voterList = (s.vote.voters || []).map((i) => s.players[i]).filter(Boolean);
+    voterList.forEach((v) => {
+      const vd = s.vote.verdicts[v.id];
+      const line = el("div", "vote-line");
+      line.appendChild(el("span", "vote-who", `${v.avatar} ${v.name}`));
+      line.appendChild(el("span", "vote-verdict", vd === "yes" ? "✅ A" : vd === "no" ? "❌ B" : "…"));
+      status.appendChild(line);
+    });
+    const me = voterList.find((v) => !v.isAI && !s.vote.verdicts[v.id]);
+    if (me) {
+      const a = el("button", "btn btn-good", "Vote A");
+      a.onclick = () => MP.sendVote("yes");
+      const b = el("button", "btn btn-bad", "Vote B");
+      b.onclick = () => MP.sendVote("no");
+      actions.appendChild(a);
+      actions.appendChild(b);
+    } else {
+      actions.appendChild(el("div", "ai-thinking", "Tallying…"));
+    }
+  } else if (s.phase === "await-duel") {
+    s.players.forEach((p) => {
+      const line = el("div", "vote-line");
+      line.appendChild(el("span", "vote-who", `${p.avatar} ${p.name}`));
+      line.appendChild(el("span", "vote-verdict", answered.includes(p.id) ? "✍️ in" : "…"));
+      status.appendChild(line);
+    });
+    const pending = duelPendingHumans(s);
+    const myId = s.mode === "room" && s.room ? s.room.playerId : null;
+    const iOwe = myId ? pending.some((i) => s.players[i].id === myId) : pending.length > 0;
+    if (iOwe) {
+      const who = myId ? s.players.find((p) => p.id === myId) : s.players[pending[0]];
+      body.appendChild(el("div", "duel-prompt", `${who.avatar} ${who.name} — your answer:`));
+      const inp = el("input", "answer-input");
+      inp.type = "text";
+      inp.maxLength = 90;
+      inp.placeholder = "Worst possible answer…";
+      body.appendChild(inp);
+      const go = el("button", "btn btn-primary", "Lock it in");
+      go.onclick = () => submitDuelAnswer(inp.value);
+      inp.onkeydown = (e) => { if (e.key === "Enter") submitDuelAnswer(inp.value); };
+      actions.appendChild(go);
+      setTimeout(() => inp.focus(), 40);
+    } else {
+      body.appendChild(el("div", "ai-thinking", "Waiting for the rest of the table…"));
+    }
+  }
+  modal.classList.add("open");
+}
+
 /* ---- Vote modal ---- */
 function openVoteModal() {
   if (!G.state.vote) return;
@@ -1328,15 +2148,22 @@ function renderVoteModal() {
   const card = s.vote.cardId ? CARD_BY_ID[s.vote.cardId] : null;
   $("#vote-title").textContent = card ? card.title : "The Group Decides";
   $("#vote-desc").textContent = card ? card.description : "Cast your verdict.";
-  $("#vote-mode").textContent = s.vote.mode === "unanimous"
-    ? "UNANIMOUS MERCY — one punish dooms you"
-    : "MAJORITY RULES — tie forgives";
+  $("#vote-mode").textContent = s.vote.context === "duel"
+    ? "HEAD TO HEAD — vote with your laugh, AP is paid by share"
+    : s.vote.mode === "unanimous"
+      ? "UNANIMOUS MERCY — one punish dooms you"
+      : s.vote.mode === "split"
+        ? "SPLIT DECISION — the closer to 50/50, the more AP"
+        : "MAJORITY RULES — tie forgives";
   const box = $("#vote-buttons");
   box.innerHTML = "";
-  const pendingHuman = s.players.find((v) => !v.isAI && v.id !== cur().id && !s.vote.verdicts[v.id]);
+  const voterList = s.vote.voters
+    ? s.vote.voters.map((i) => s.players[i]).filter(Boolean)
+    : s.players.filter((_, i) => i !== s.current);
+  const pendingHuman = voterList.find((v) => !v.isAI && !s.vote.verdicts[v.id]);
   const status = $("#vote-status");
   status.innerHTML = "";
-  s.players.filter((_, i) => i !== s.current).forEach((v) => {
+  voterList.forEach((v) => {
     const line = el("div", "vote-line");
     line.appendChild(el("span", "vote-who", `${v.avatar} ${v.name}`));
     const verdict = s.vote.verdicts[v.id];
@@ -1358,9 +2185,11 @@ function renderVoteModal() {
 function showVoteResults(result, done) {
   const box = $("#vote-buttons");
   box.innerHTML = "";
-  const outcome = result.succeeded
-    ? (result.labels ? result.labels[0].toUpperCase() : "PASSED")
-    : (result.labels ? result.labels[1].toUpperCase() : "FAILED");
+  const outcome = result.mode === "split"
+    ? `${result.splitPct}% DIVISIVE`
+    : result.succeeded
+      ? (result.labels ? result.labels[0].toUpperCase() : "PASSED")
+      : (result.labels ? result.labels[1].toUpperCase() : "FAILED");
   box.appendChild(el("div", "vote-result-head", `Result: ${result.tally} — ${outcome}`));
   const list = el("div", "vote-lines");
   result.votes.forEach((v) => {
@@ -1392,6 +2221,8 @@ function showGameOverModal() {
   add("😇 Most Honest", a.mostHonest);
   add("🎯 Most Sabotaged", a.mostSabotaged);
   add("🔥 Chaos Gremlin", a.chaosGremlin);
+  if (a.mostDivisive) add(`🪓 Most Divisive (${a.mostDivisive.stats.bestSplit}% split)`, a.mostDivisive);
+  if (a.duelChampion) add(`🎤 Duel Champion (${a.duelChampion.stats.duelsWon} won)`, a.duelChampion);
   $("#gameover-modal").classList.add("open");
 }
 
@@ -1572,7 +2403,15 @@ if (typeof module !== "undefined" && module.exports) {
     rngNext, rngInt, rngChoice, hashSeed, freshState, newPlayer, createGame,
     rollDie, movePlayer, drawCard, buildDecks, shuffleArr, resolveTile, resolveNext,
     applyResponse, applyDeltas, startVote, maybeFinishVote, castHumanVote,
+    startCardVote, splitScore, applySplitResult, lapMultiplier, cardRewardAp, lapNote,
+    WAGER, wagerEligible, wagerOpen, canWager, takeWager, settleWager, aiMaybeWager, submitWager,
+    RISK_BANDS, riskBand, riskPayout, riskOutcome,
+    SCREW, screwEligible, screwOpen, canScrew, takeScrew, settleScrew, screwPassResponse,
+    screwRushResponse, screwTargetedAt, aiMaybeScrew, localScrewActor, submitScrew,
     aiShouldBluff, aiTakeRisk, aiChooseSabotageTarget, aiVoteOnPlayer, aiRespondToCard,
+    aiVoteOnDuel, aiDuelAnswer, duelShare, normDuelAnswer, findDuelDuplicates, duelSafetyAp,
+    startDuel, submitDuelAnswer, maybeFinishDuelAnswers, finishDuelPair, startDuelVote,
+    endDuel, duelAnswered, duelPendingHumans, renderDuelModal,
     ranking, computeAwards, endTurn, finishTile, doRoll, resolveActiveCardForAI,
     G, PENALTY, CARD_BY_ID, AI_PROFILES, BOARD_SIZE,
   };

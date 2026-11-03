@@ -81,7 +81,7 @@ check "$P4VOTE" "the judged player cannot vote" "judged player blocked from voti
 
 echo "— board + cards endpoints"
 check "$(curl -s $BASE/rooms/board.php | jq '.size')" "54" "board endpoint returns 54 tiles"
-check "$(curl -s $BASE/rooms/cards.php | jq '.count')" "180" "cards endpoint returns 180"
+check "$(curl -s $BASE/rooms/cards.php | jq '.count')" "202" "cards endpoint returns 202"
 check "$(curl -s "$BASE/rooms/cards.php?type=risk" | jq '.cards[0].type')" "risk" "cards endpoint filters by type"
 check "$(curl -s $BASE/rooms/cards.php | jq '.cards[0] | has("ap")')" "false" "cards endpoint withholds deltas"
 

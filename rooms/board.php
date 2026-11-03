@@ -9,13 +9,13 @@ require __DIR__ . '/lib.php';
 $names = [
     'START — Small Talk Roundabout', 'Elevator Silence', 'Two Doors, Both Wrong',
     'The Bet', 'Breather Bench', 'Wrong Name at a Party', 'The Group Chat Dilemma',
-    'Sabotage Alley', 'High Wire Act', 'The Awkward Hug', 'The Tribunal',
+    'Sabotage Alley', 'High Wire Act', 'The Awkward Hug', 'The Tribunal Duel',
     'Water Cooler', 'Fork in the Road', 'Confession Wall', 'Double or Nothing',
     'Chaos Vortex', 'Compliment Combat', 'Backstab Boulevard', "Devil's Deal",
     'Neutral Corner', 'Court of Public Opinion', 'Reply-All Regret', 'The Long Con',
     'Karaoke Nightmares', 'Double Trouble', 'Rock and a Hard Place', 'Knife Drawer',
     'Smoke Break', 'Text to the Wrong Person', 'All-In', 'Chaos Portal',
-    'Jury of Peers', 'Between a Rock and a Boss', 'Small Talk Speedrun', 'Safe House',
+    'Duel of the Damned', 'Between a Rock and a Boss', 'Small Talk Speedrun', 'Safe House',
     'Trap Door', 'Leap of Faith', 'The Wedding Toast', 'Lesser Evil Lotto',
     'The Referendum', 'Chaos Storm', 'The Group Photo', 'Sabotage Junction',
     'No Good Options', 'The Gamble', 'Zen Garden', 'Family Dinner', 'Final Judgement',
@@ -24,8 +24,8 @@ $names = [
 ];
 $labels = [
     'safe' => 'SAFE', 'scenario' => 'SCEN', 'choice' => 'CHCE', 'risk' => 'RISK',
-    'sabotage' => 'SABO', 'vote' => 'VOTE', 'chaos' => 'CHOS', 'double' => 'DBLE',
-    'final' => 'FINL',
+    'sabotage' => 'SABO', 'vote' => 'VOTE', 'duel' => 'DUEL', 'chaos' => 'CHOS',
+    'double' => 'DBLE', 'final' => 'FINL',
 ];
 
 $types = awkward_board_types();

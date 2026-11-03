@@ -3,7 +3,7 @@
  * =====================================
  * 54 tiles in a loop. Index 0 is START (safe). The composition and rhythm of
  * tile types are documented in RULES.md §5:
- *   Scenario 13, Choice 9, Risk 8, Sabotage 6, Vote 5, Safe 7, Chaos 3,
+ *   Scenario 13, Choice 9, Risk 8, Sabotage 6, Vote 3, Duel 2, Safe 7, Chaos 3,
  *   Double Trouble 2, Final Combo 1  =  54 tiles.
  *
  * Tile shape (square/circle/diamond/pill) is derived from the tile index by
@@ -22,7 +22,7 @@ const AWKWARD_BOARD = [
   /*  7 */ { type: "sabotage",  name: "Sabotage Alley" },
   /*  8 */ { type: "risk",      name: "High Wire Act" },
   /*  9 */ { type: "scenario",  name: "The Awkward Hug" },
-  /* 10 */ { type: "vote",      name: "The Tribunal" },
+  /* 10 */ { type: "duel",      name: "The Tribunal Duel" },
   /* 11 */ { type: "safe",      name: "Water Cooler" },
   /* 12 */ { type: "choice",    name: "Fork in the Road" },
   /* 13 */ { type: "scenario",  name: "Confession Wall" },
@@ -43,7 +43,7 @@ const AWKWARD_BOARD = [
   /* 28 */ { type: "scenario",  name: "Text to the Wrong Person" },
   /* 29 */ { type: "risk",      name: "All-In" },
   /* 30 */ { type: "chaos",     name: "Chaos Portal" },
-  /* 31 */ { type: "vote",      name: "Jury of Peers" },
+  /* 31 */ { type: "duel",      name: "Duel of the Damned" },
   /* 32 */ { type: "choice",    name: "Between a Rock and a Boss" },
   /* 33 */ { type: "scenario",  name: "Small Talk Speedrun" },
   /* 34 */ { type: "safe",      name: "Safe House" },
@@ -77,6 +77,7 @@ const TILE_LABELS = {
   risk:     "RISK",
   sabotage: "SABO",
   vote:     "VOTE",
+  duel:     "DUEL",
   chaos:    "CHOS",
   double:   "DBLE",
   final:    "FINL"

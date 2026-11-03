@@ -21,7 +21,7 @@ if (($state['phase'] ?? '') !== 'await-vote' || empty($state['vote'])) awkward_f
 
 $idx = awkward_player_index($state, $playerId);
 if ($idx < 0) awkward_fail('unknown player', 403);
-if ($idx === (int)$state['current']) awkward_fail('the judged player cannot vote', 403);
+if (!in_array($idx, awkward_vote_voters($state), true)) awkward_fail('you cannot vote on this', 403);
 
 $state['vote']['verdicts'][$playerId] = $verdict;
 if (awkward_vote_complete($state)) {

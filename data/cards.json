@@ -3399,5 +3399,406 @@
    "sp": 0
   },
   "mode": "majority"
+ },
+ {
+  "id": "DL-01",
+  "type": "vote",
+  "mode": "split",
+  "title": "The Recline Question",
+  "description": "Is it acceptable to recline your seat all the way on a two-hour flight?",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel",
+   "social"
+  ],
+  "splitAp": 5
+ },
+ {
+  "id": "DL-02",
+  "type": "vote",
+  "mode": "split",
+  "title": "Pineapple Protocol",
+  "description": "Does pineapple belong on pizza?",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food",
+   "party"
+  ],
+  "splitAp": 6
+ },
+ {
+  "id": "DL-03",
+  "type": "vote",
+  "mode": "split",
+  "title": "The Two-Minute Friend",
+  "description": "Should the group wait for the person who is 'two minutes away'?",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "social"
+  ],
+  "splitAp": 4
+ },
+ {
+  "id": "DL-04",
+  "type": "vote",
+  "mode": "split",
+  "title": "Even Split",
+  "description": "Is splitting the bill evenly fair, even when you ordered the cheapest thing?",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "money",
+   "food"
+  ],
+  "splitAp": 5
+ },
+ {
+  "id": "DL-05",
+  "type": "vote",
+  "mode": "split",
+  "title": "Read Receipt Crime",
+  "description": "Is leaving someone on read for three days a criminal offence?",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "tech"
+  ],
+  "splitAp": 4
+ },
+ {
+  "id": "DL-06",
+  "type": "vote",
+  "mode": "split",
+  "title": "Cold Pizza Breakfast",
+  "description": "Cold pizza is a legitimate breakfast food.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food",
+   "cringe"
+  ],
+  "splitAp": 4
+ },
+ {
+  "id": "DL-07",
+  "type": "vote",
+  "mode": "split",
+  "title": "Plus-One Stranger",
+  "description": "A wedding invite should cover a plus-one you've never met.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "money"
+  ],
+  "splitAp": 5
+ },
+ {
+  "id": "DL-08",
+  "type": "vote",
+  "mode": "split",
+  "title": "Reply-All Justice",
+  "description": "Reply-all is sometimes the correct call.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "tech"
+  ],
+  "splitAp": 6
+ },
+ {
+  "id": "DL-09",
+  "type": "vote",
+  "mode": "split",
+  "title": "Socks and Sandals",
+  "description": "Socks with sandals is comfort, not a crime.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "cringe",
+   "social"
+  ],
+  "splitAp": 4
+ },
+ {
+  "id": "DL-10",
+  "type": "vote",
+  "mode": "split",
+  "title": "Microwave Fish Justice",
+  "description": "The person who microwaved fish should be confronted publicly.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work",
+   "food"
+  ],
+  "splitAp": 5
+ },
+ {
+  "id": "DL-11",
+  "type": "vote",
+  "mode": "split",
+  "title": "Birthday Grace",
+  "description": "Birthday people get 20 minutes of lateness without comment.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party",
+   "social"
+  ],
+  "splitAp": 4
+ },
+ {
+  "id": "DL-12",
+  "type": "vote",
+  "mode": "split",
+  "title": "The 4% Charger",
+  "description": "Taking the wall charger at 4% is justified.",
+  "effect": "YES/NO vote: a near 50/50 split pays up to +6 AP. Unanimous (3+ voters) = +1 SP.",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech",
+   "social"
+  ],
+  "splitAp": 5
+ },
+ {
+  "id": "DU-01",
+  "type": "duel",
+  "title": "Worst Job Interview Answer",
+  "description": "Write the single worst thing you could say in a job interview.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "answers": [
+   "I mostly applied because your job posting looked lonely.",
+   "My biggest weakness is that I'm always right, and people hate that.",
+   "I'm not going to lie, I have no idea what this company does.",
+   "Can I bring my mum to the interview? She does the talking.",
+   "I was fired from my last job for reasons I'm legally allowed to call 'creative differences'.",
+   "My five-year plan is to be doing your job, honestly.",
+   "I don't really need the money, I just wanted to see the inside of this building.",
+   "If you hire me I'll stop coming here every day to use the wifi."
+  ]
+ },
+ {
+  "id": "DU-02",
+  "type": "duel",
+  "title": "Most Useless Superpower",
+  "description": "Invent the most useless superpower imaginable.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "party"
+  ],
+  "answers": [
+   "The ability to know exactly how many spiders are in the room. That's it. Just the number.",
+   "Instant, perfect recall of every password you've ever used, but only while asleep.",
+   "You can talk to fish, but only about their finances.",
+   "You always know which sock went missing, but never where it is.",
+   "You can teleport exactly one inch to the left.",
+   "Super strength, but only in your non-dominant pinky.",
+   "You can levitate, but only while already standing on a chair.",
+   "You can see five seconds into the past, with your eyes closed."
+  ]
+ },
+ {
+  "id": "DU-03",
+  "type": "duel",
+  "title": "Worst Kids' Party Theme",
+  "description": "Pitch the worst possible theme for a five-year-old's birthday party.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "family",
+   "party"
+  ],
+  "answers": [
+   "A surprise audit party — everyone brings receipts.",
+   "Tax Return Luau: each child files one (1) form.",
+   "Silent Disco Funeral, with a bouncy castle shaped like a hearse.",
+   "Escape Room: the room is just the car, and it's a school run.",
+   "A murder mystery where the victim is the birthday cake.",
+   "Corporate Team Building: the clown has a lanyard and a slide deck.",
+   "BYO Insulation: the venue is a car park in January.",
+   "Petting Zoo But It's Just Wasps."
+  ]
+ },
+ {
+  "id": "DU-04",
+  "type": "duel",
+  "title": "Worst Hotel Find",
+  "description": "What is the worst thing to find in your hotel room?",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "travel"
+  ],
+  "answers": [
+   "A guest book with one entry, in your handwriting, dated tomorrow.",
+   "A minibar receipt for everything, charged before you arrived.",
+   "Someone else's holiday photos, already framed on the wall.",
+   "A note reading 'we loved having you last time' — this is your first stay.",
+   "A hair dryer still warm.",
+   "The bathroom door locks from the outside and there's a small stool in the hallway.",
+   "A 'Do Not Disturb' sign already hanging on the inside.",
+   "The TV is on, paused, on the channel you fell asleep to at home."
+  ]
+ },
+ {
+  "id": "DU-05",
+  "type": "duel",
+  "title": "Your Search History Says",
+  "description": "Finish the sentence: 'My search history says I'm...'",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "tech"
+  ],
+  "answers": [
+   "...one bad week away from a documentary series.",
+   "...legally allowed to be this curious, and nothing more.",
+   "...building a life I would not defend in court.",
+   "...the kind of person who reads the terms and conditions, for fun.",
+   "...very close to a diagnosis I found on page four.",
+   "...emotionally sponsored by three separate subscription services.",
+   "...confident that nobody else googles this, and wrong.",
+   "...a person with a plan, and 46 tabs of evidence against it."
+  ]
+ },
+ {
+  "id": "DU-06",
+  "type": "duel",
+  "title": "Worst First Date",
+  "description": "Plan the worst possible first date. Be specific.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship"
+  ],
+  "answers": [
+   "A five-hour hike, no water, and I've brought my dad.",
+   "Dinner at my parents' house, where they show the slideshow. All of it.",
+   "IKEA, and we're building the wardrobe today.",
+   "A group fitness class, then a group therapy session, then a group photo.",
+   "We volunteer to clean my garage and I time it.",
+   "A walking tour of every ex's apartment building.",
+   "A restaurant where I know the staff too well and they know what I did.",
+   "Mini golf, but I keep score and I really care about the score."
+  ]
+ },
+ {
+  "id": "DU-07",
+  "type": "duel",
+  "title": "Rejected Soda Flavour",
+  "description": "Invent a soda flavour that should absolutely not exist.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "food"
+  ],
+  "answers": [
+   "Warm water, but sparkling, and it's called Perrier.",
+   "Hot dog water with a hint of lime.",
+   "Dust, but the good dust from under the radiator.",
+   "Coffee, but it's flat and it's a soda now.",
+   "Cucumber and regret, in a can, 45 calories.",
+   "Sunscreen, and the label says 'beach ready'.",
+   "Milk, carbonated, in a glass bottle for some reason.",
+   "Oat milk, but it's fizzy and it's called Fizz Oat."
+  ]
+ },
+ {
+  "id": "DU-08",
+  "type": "duel",
+  "title": "Wedding Whisper",
+  "description": "What is the worst thing to whisper to someone at a wedding?",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "relationship",
+   "party"
+  ],
+  "answers": [
+   "Your speech is going to be great, mine is about the texts.",
+   "Statistically, one of us isn't coming to the next one.",
+   "The cake is a lawsuit.",
+   "I've seen the seating chart and I'm sorry.",
+   "If this doesn't work out, the bar tab is on me.",
+   "I bet you didn't think it would be this soon either.",
+   "Your ex is here, they're at table nine, they look incredible.",
+   "Nobody's filming the vows, keep it short."
+  ]
+ },
+ {
+  "id": "DU-09",
+  "type": "duel",
+  "title": "Most Awkward Thing to Say to Your Boss",
+  "description": "Say the single most awkward thing you could say to your boss.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "work"
+  ],
+  "answers": [
+   "I love that for us.",
+   "You look tired. Have you considered sleep?",
+   "Me and the team were just discussing your emails.",
+   "Can we circle back to the part where you were wrong?",
+   "This could have been a message.",
+   "I've been thinking about your role a lot lately.",
+   "You're like a father to me, but professionally.",
+   "Should we talk about the survey results, or wait for HR?"
+  ]
+ },
+ {
+  "id": "DU-10",
+  "type": "duel",
+  "title": "Funeral Home Slogan",
+  "description": "Write the worst possible advertising slogan for a funeral home.",
+  "effect": "Everyone writes one answer. Answers are paired anonymously; the table votes. Vote share pays up to 4 AP, +2 for winning (+4 on a unanimous sweep).",
+  "ap": 0,
+  "sp": 0,
+  "tags": [
+   "dark humor"
+  ],
+  "answers": [
+   "You'll be dying to get in.",
+   "Nobody leaves unsatisfied.",
+   "We'll see you at the last minute.",
+   "Your last event, handled flawlessly.",
+   "Put it all to rest — including the paperwork.",
+   "Family plans available. Long-term, obviously.",
+   "Come for the quiet. Stay forever.",
+   "Nobody has ever complained."
+  ]
  }
 ]
